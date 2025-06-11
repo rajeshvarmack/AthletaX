@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEye, faEyeSlash, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ButtonModule } from 'primeng/button';
@@ -24,6 +25,7 @@ import { ToastService } from '../../services/toast.service';
 })
 export class LoginComponent {
   private _toastService = inject(ToastService);
+  private _router = inject(Router);
   faEye = faEye;
   faEyeSlash = faEyeSlash;
   faUser = faUser;
@@ -160,7 +162,8 @@ export class LoginComponent {
         'Login Successful',
         `Welcome back, ${this.credentials().username}!`
       );
-      // TODO: Implement actual authentication service call
+      // Redirect to home after successful login
+      this._router.navigate(['/home']);
     }, 2000);
   }
 

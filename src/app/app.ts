@@ -1,21 +1,12 @@
 import { Component } from '@angular/core';
-import { LoginComponent } from './features/auth/login';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [LoginComponent],
-  template: `<app-login></app-login>`,
-  styles: [
-    `
-      :host {
-        display: block;
-        width: 100%;
-        height: 100vh;
-      }
-    `,
-  ],
+  imports: [RouterOutlet],
+  templateUrl: './app.html',
+  styleUrls: ['./app.css']
 })
-export class App {
-  protected title = 'NexAcademyHub';
+export class App {  
 }
