@@ -2,3 +2,39 @@
 
 @import 'tailwindcss';
 @import "primeicons/primeicons.css";
+
+/* Reusable Card Component */
+.card {
+  @apply bg-white rounded-xl shadow-md p-6 transition-shadow duration-200 hover:shadow-lg;
+}
+.card-header {
+  @apply flex items-center justify-center mb-4 text-3xl font-semibold text-gray-800;
+}
+.card-content {
+  @apply text-gray-600 text-base;
+}
+
+/* Reusable App Background Gradient */
+.app-bg {
+  background: radial-gradient(circle at 60% 40%, #5f2c82 0%, #3a1c71 40%, #1a1440 100%);
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 1.25rem;
+  }
+  .card-header {
+    font-size: 1.25rem;
+  }
+  .app-bg header h1 {
+    font-size: 2rem;
+  }
+  .app-bg main {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
