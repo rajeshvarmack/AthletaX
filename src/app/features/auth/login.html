@@ -53,8 +53,7 @@
             (blur)="usernameFocused = false"
             [class.invalid]="!validation().username.valid && (validation().username.touched || formSubmitted())"
             [class.valid]="validation().username.valid && validation().username.touched"
-          />
-          <fa-icon [icon]="faUser" class="input-icon"></fa-icon>
+          />          
           <i
             class="pi validation-icon"
             [ngClass]="{
@@ -96,7 +95,7 @@
             [class.invalid]="!validation().password.valid && (validation().password.touched || formSubmitted())"
             [class.valid]="validation().password.valid && validation().password.touched"
           />
-          <fa-icon [icon]="faLock" class="input-icon"></fa-icon>
+          
           <button
             type="button"
             class="password-toggle"
@@ -147,8 +146,9 @@
         class="login-button"
         [loading]="isLoading()"
         [disabled]="isLoading()"
-        label="Sign In"
+        label="&nbsp;&nbsp;Sign In"
         icon="pi pi-sign-in"
+        iconPos="left"
       ></button>
     </form>
     <!-- Footer -->
@@ -225,3 +225,5 @@
     <div class="goal-post left-goal">
       <div class="goal-frame"></div>
     </div>
+  </div>
+</div>
