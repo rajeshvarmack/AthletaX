@@ -6,8 +6,14 @@ export const routes: Routes = [
     loadComponent: () => import('./features/home/home').then(m => m.Home),
   },
   {
+    path: 'branches',
+    loadComponent: () =>
+      import('./features/branches/branch-list').then(m => m.BranchList),
+  },
+  {
     path: 'auth/login',
-    loadComponent: () => import('./features/auth/login').then(m => m.LoginComponent),
+    loadComponent: () =>
+      import('./features/auth/login').then(m => m.LoginComponent),
   },
   {
     path: '',
@@ -16,6 +22,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    loadComponent: () => import('./features/not-found/not-found').then(m => m.NotFound),
+    loadComponent: () =>
+      import('./features/not-found/not-found').then(m => m.NotFound),
   },
 ];

@@ -1,0 +1,189 @@
+<div class="app-bg min-h-screen">
+  <!-- Header -->
+  <header class="relative flex flex-col items-center pt-8 pb-6">
+    <!-- Back Button -->
+    <button
+      (click)="onBack()"
+      class="absolute top-6 left-4 flex cursor-pointer items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 sm:left-8"
+    >
+      <i class="pi pi-arrow-left"></i>
+      <span class="hidden sm:inline">Back</span></button
+    ><!-- Sign Out Button -->
+    <button
+      (click)="onSignOut()"
+      class="absolute top-6 right-8 flex cursor-pointer items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 md:right-8"
+    >
+      <i class="pi pi-sign-out"></i>
+      <span class="hidden sm:inline">Sign Out</span></button
+    ><!-- View Toggle Button - Only show on md+ screens -->
+    <button
+      (click)="toggleViewMode()"
+      class="absolute top-6 right-40 hidden cursor-pointer items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-white/20 active:scale-95 md:flex"
+    >
+      <i
+        class="pi transition-transform duration-300"
+        [ngClass]="isFullWidth ? 'pi-compress' : 'pi-expand'"
+      ></i>
+      <span class="transition-all duration-300"
+        >{{ isFullWidth ? 'Compact' : 'Full Width' }}</span
+      >
+    </button>
+
+    <!-- Logo -->
+    <div class="mb-4">
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 64 64"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="32"
+          cy="32"
+          r="30"
+          fill="url(#grad1)"
+          stroke="#fff"
+          stroke-width="2"
+        />
+        <defs>
+          <radialGradient id="grad1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#a4508b" />
+            <stop offset="100%" stop-color="#3a1c71" />
+          </radialGradient>
+        </defs>
+        <rect
+          x="26"
+          y="40"
+          width="12"
+          height="6"
+          rx="2"
+          fill="#fff"
+          fill-opacity="0.8"
+        />
+        <ellipse
+          cx="32"
+          cy="32"
+          rx="10"
+          ry="12"
+          fill="#fff"
+          fill-opacity="0.9"
+        />
+        <path
+          d="M22 32 Q14 28 22 24"
+          stroke="#fff"
+          stroke-width="2"
+          fill="none"
+        />
+        <path
+          d="M42 32 Q50 28 42 24"
+          stroke="#fff"
+          stroke-width="2"
+          fill="none"
+        />
+        <polygon
+          points="32,26 33.8,30.2 38.4,30.6 34.8,33.4 36,38 32,35.2 28,38 29.2,33.4 25.6,30.6 30.2,30.2"
+          fill="#a4508b"
+        />
+      </svg>
+    </div>
+
+    <h1 class="mb-2 text-3xl font-extrabold text-white drop-shadow md:text-4xl">
+      AthletaNX
+    </h1>
+    <p class="text-lg font-medium text-blue-100">Choose Your Branch</p>
+  </header>
+  <!-- Branch Cards Grid -->
+  <main class="flex-1 px-4 pb-8 transition-all duration-700 ease-in-out">
+    <div
+      [ngClass]="isFullWidth ? 'mx-auto transition-all duration-700 ease-in-out' : 'mx-auto max-w-7xl transition-all duration-700 ease-in-out'"
+    >
+      <div
+        class="transition-all duration-700 ease-in-out"
+        [ngClass]="isFullWidth ? 
+          'grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6' : 
+          'grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'"
+      >
+        <div
+          *ngFor="let branch of branches; let i = index"
+          (click)="onBranchClick(branch)"
+          (keyup.enter)="onBranchClick(branch)"
+          (keyup.space)="onBranchClick(branch)"
+          class="branch-card group cursor-pointer overflow-hidden rounded-xl border shadow-lg transition-all duration-500 ease-in-out hover:-translate-y-1 hover:shadow-xl"
+          [ngClass]="getCategoryCardClass(branch.category)"
+          [style.animation-delay]="(i * 50) + 'ms'"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="'Select ' + branch.name + ' branch in ' + branch.location"
+        >
+          <!-- Branch Header with Category Icon -->
+          <div
+            class="relative flex h-40 items-center justify-center overflow-hidden rounded-t-xl"
+            [ngClass]="getCategoryHeaderClass(branch.category)"
+          >
+            <div
+              class="absolute inset-0"
+              [ngClass]="getCategoryOverlayClass(branch.category)"
+            ></div>
+            <!-- Category Icon -->
+            <div class="relative z-10 flex items-center justify-center">
+              <div
+                class="flex h-28 w-28 items-center justify-center rounded-full bg-white/95 shadow-lg backdrop-blur-sm transition-all duration-500 group-hover:scale-110 group-hover:bg-white group-hover:shadow-xl"
+              >
+                <i
+                  class="category-icon-medium transition-all duration-300"
+                  [ngClass]="'pi ' + getCategoryIcon(branch.category) + ' ' + getCategoryColor(branch.category)"
+                ></i>
+              </div>
+            </div>
+
+            <!-- Category Badge -->
+            <div
+              class="absolute top-3 right-3 z-20 cursor-help rounded-lg px-3 py-1.5 text-xs font-bold shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-2xl"
+              [ngClass]="getCategoryStyles(branch.category)"
+              [title]="branch.category + ' Category'"
+            >
+              <i
+                class="pi mr-1.5"
+                [ngClass]="getCategoryIcon(branch.category)"
+              ></i>
+              {{ branch.category }}
+            </div>
+          </div>
+          <!-- Branch Info -->
+          <div
+            class="branch-card-content rounded-b-xl p-6"
+            [ngClass]="getCategoryContentClass(branch.category)"
+          >
+            <!-- Branch Name -->
+            <h3
+              class="mb-2 text-center text-xl font-bold text-gray-800 transition-colors duration-300 group-hover:text-blue-600"
+            >
+              {{ branch.name }}
+            </h3>
+
+            <!-- Location -->
+            <div class="mb-4 flex items-center justify-center text-gray-600">
+              <i class="pi pi-map-marker mr-2 text-blue-500"></i>
+              <span class="text-sm font-medium">{{ branch.location }}</span>
+            </div>
+
+            <!-- Additional Info -->
+            <div
+              class="flex items-center justify-between border-t border-gray-100 pt-3 text-xs text-gray-500"
+            >
+              <span class="flex items-center">
+                <i class="pi pi-users mr-1 text-blue-500"></i>
+                {{ branch.teams }} Teams
+              </span>
+              <span class="flex items-center">
+                <span class="font-semibold text-green-700">Active:</span>
+                <span class="ml-1 font-bold">{{ branch.activePlayers }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

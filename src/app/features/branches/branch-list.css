@@ -1,0 +1,330 @@
+/* Branch List Component Styles */
+
+.branch-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 0.75rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  will-change: transform;
+  animation:
+    slideInUp 0.6s ease-out both,
+    springIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.branch-card:hover {
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(59, 130, 246, 0.1);
+  transform: translateY(-0.5rem);
+}
+
+.branch-card:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.branch-card-content {
+  position: relative;
+}
+
+.branch-card-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.branch-card:hover .branch-card-content::before {
+  opacity: 1;
+}
+
+/* Loading animation for images */
+.branch-card img {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Enhanced animations for view transitions */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Card entrance animations with spring effect */
+@keyframes springIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(50px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Staggered animation for cards */
+.branch-card:nth-child(1) {
+  animation-delay: 0ms;
+}
+.branch-card:nth-child(2) {
+  animation-delay: 100ms;
+}
+.branch-card:nth-child(3) {
+  animation-delay: 200ms;
+}
+.branch-card:nth-child(4) {
+  animation-delay: 300ms;
+}
+.branch-card:nth-child(5) {
+  animation-delay: 400ms;
+}
+.branch-card:nth-child(6) {
+  animation-delay: 500ms;
+}
+.branch-card:nth-child(7) {
+  animation-delay: 600ms;
+}
+.branch-card:nth-child(8) {
+  animation-delay: 700ms;
+}
+.branch-card:nth-child(n + 9) {
+  animation-delay: 800ms;
+}
+
+/* Full-width transition animations */
+.grid {
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced button animations */
+button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Category tooltip enhancements */
+.group\/tooltip {
+  position: relative;
+}
+
+.group\/tooltip [class*='absolute']:not(.group\/tooltip > [class*='absolute']) {
+  pointer-events: none;
+}
+
+/* Smooth grid transitions */
+[class*='grid'] {
+  transition:
+    grid-template-columns 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    gap 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Category badge animations */
+.group\/tooltip .pi {
+  transition: transform 0.3s ease;
+}
+
+.group\/tooltip:hover .pi {
+  transform: rotate(360deg);
+}
+
+/* Enhanced hover effects for categories */
+.cursor-help:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .branch-card:hover {
+    transform: translateY(0);
+  }
+}
+
+/* Focus and hover states for better UX */
+.branch-card:focus-within {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Full-width mode enhancements */
+.full-width-grid .branch-card {
+  min-height: 280px;
+}
+
+.full-width-grid .branch-card .branch-card-content {
+  padding: 1rem;
+}
+
+.full-width-grid .branch-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.full-width-grid .branch-card .relative {
+  height: 120px;
+}
+
+/* Compact view adjustments */
+@media (min-width: 1536px) {
+  .full-width-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .full-width-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+/* Custom category-based color backgrounds */
+.from-blue-25 {
+  --tw-gradient-from: rgb(239 246 255) !important; /* Very light blue */
+}
+
+.from-purple-25 {
+  --tw-gradient-from: rgb(250 245 255) !important; /* Very light purple */
+}
+
+.from-amber-25 {
+  --tw-gradient-from: rgb(255 251 235) !important; /* Very light amber */
+}
+
+.from-green-25 {
+  --tw-gradient-from: rgb(240 253 244) !important; /* Very light green */
+}
+
+.from-pink-25 {
+  --tw-gradient-from: rgb(253 242 248) !important; /* Very light pink */
+}
+
+.from-gray-25 {
+  --tw-gradient-from: rgb(249 250 251) !important; /* Very light gray */
+}
+
+/* New indigo and violet color classes for Pro and School categories */
+.from-indigo-25 {
+  --tw-gradient-from: rgb(238 242 255) !important; /* Very light indigo */
+}
+
+.from-violet-25 {
+  --tw-gradient-from: rgb(245 243 255) !important; /* Very light violet */
+}
+
+.border-indigo-200\/40 {
+  border-color: rgb(196 181 253 / 0.4);
+}
+
+.border-violet-200\/40 {
+  border-color: rgb(221 214 254 / 0.4);
+}
+
+/* Category-specific card enhancements */
+.group:hover .branch-card-content {
+  backdrop-filter: blur(8px);
+}
+
+/* Category-aware border effects */
+.border-blue-200\/40 {
+  border-color: rgb(191 219 254 / 0.4);
+}
+
+.border-purple-200\/40 {
+  border-color: rgb(221 214 254 / 0.4);
+}
+
+.border-amber-200\/40 {
+  border-color: rgb(253 230 138 / 0.4);
+}
+
+.border-green-200\/40 {
+  border-color: rgb(187 247 208 / 0.4);
+}
+
+.border-pink-200\/40 {
+  border-color: rgb(251 207 232 / 0.4);
+}
+
+.border-gray-200\/40 {
+  border-color: rgb(229 231 235 / 0.4);
+}
+
+/* Force large icon sizes for category icons */
+.category-icon-large {
+  font-size: 2.5rem !important; /* 40px - balanced size */
+  line-height: 1 !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Medium size for perfect balance in h-28 w-28 circle */
+.category-icon-medium {
+  font-size: 3rem !important; /* 48px - good proportion for 112px circle */
+  line-height: 1 !important;
+  width: 3rem !important;
+  height: 3rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Extra large variant if needed */
+.category-icon-xl {
+  font-size: 5rem !important;
+  line-height: 1 !important;
+  width: 5rem !important;
+  height: 5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
