@@ -1,0 +1,180 @@
+﻿<div class="login-container">
+  <div class="login-card">
+    <!-- Header Section -->
+    <div class="login-header">
+      <div class="logo-section">
+        <h1 class="app-title">AthletaX</h1>
+        <p class="app-tagline">One Platform. Every Sport. Every Athlete</p>
+      </div>
+      <h2 class="login-title">Welcome Back</h2>
+      <p class="login-subtitle">
+        Sign in to your account and continue your journey to excellence.
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <form class="login-form" (ngSubmit)="onLogin()" #loginForm="ngForm">
+      <!-- Username Field -->
+      <div class="form-group">
+        <label for="username" class="form-label">
+          <i class="pi pi-user field-icon"></i>
+          <span class="label-text">Username<span class="required-indicator">*</span></span>
+        </label>
+        <div class="input-wrapper">
+          <input
+            id="username"
+            type="text"
+            pInputText
+            class="form-input"
+            placeholder="Enter your username"
+            [(ngModel)]="credentials().username"
+            (ngModelChange)="onUsernameChange($event)"
+            name="username"
+            required
+            [class.invalid]="!validation().username.valid && (validation().username.touched || formSubmitted())"
+            [class.valid]="validation().username.valid && validation().username.touched"
+          />
+          <i
+            class="validation-icon"
+            [class.pi-check-circle]="validation().username.valid && validation().username.touched"
+            [class.pi-exclamation-circle]="!validation().username.valid && (validation().username.touched || formSubmitted())"
+            [class.success]="validation().username.valid && validation().username.touched"
+            [class.error]="!validation().username.valid && (validation().username.touched || formSubmitted())"
+          ></i>
+        </div>
+        <div
+          class="error-message"
+          *ngIf="!validation().username.valid && (validation().username.touched || formSubmitted())"
+        >
+          <i class="pi pi-exclamation-triangle"></i>
+          {{ validation().username.message }}
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password" class="form-label">
+          <i class="pi pi-lock field-icon"></i>
+          <span class="label-text">Password<span class="required-indicator">*</span></span>
+        </label>
+        <div class="password-wrapper">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            pInputText
+            class="form-input password-input"
+            placeholder="Enter your password"
+            [(ngModel)]="credentials().password"
+            (ngModelChange)="onPasswordChange($event)"
+            name="password"
+            required
+            [class.invalid]="!validation().password.valid && (validation().password.touched || formSubmitted())"
+            [class.valid]="validation().password.valid && validation().password.touched"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            <i [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          </button>
+          <i
+            class="validation-icon password-validation-icon"
+            [class.pi-check-circle]="validation().password.valid && validation().password.touched"
+            [class.pi-exclamation-circle]="!validation().password.valid && (validation().password.touched || formSubmitted())"
+            [class.success]="validation().password.valid && validation().password.touched"
+            [class.error]="!validation().password.valid && (validation().password.touched || formSubmitted())"
+          ></i>
+        </div>
+        <div
+          class="error-message"
+          *ngIf="!validation().password.valid && (validation().password.touched || formSubmitted())"
+        >
+          <i class="pi pi-exclamation-triangle"></i>
+          {{ validation().password.message }}
+        </div>
+      </div>
+
+      <!-- Remember Me & Forgot Password -->
+      <div class="form-options">
+        <div class="remember-me">
+          <input
+            id="rememberMe"
+            type="checkbox"
+            [(ngModel)]="rememberMe"
+            name="rememberMe"
+          />
+          <label for="rememberMe">Remember me</label>
+        </div>
+        <button
+          type="button"
+          class="forgot-password-link"
+          (click)="onForgotPassword()"
+        >
+          Forgot password?
+        </button>
+      </div>
+      <!-- Login Button -->
+      <button
+        type="submit"
+        pButton
+        class="login-button"
+        [loading]="isLoading()"
+        [disabled]="isLoading()"
+        label="Sign In"
+        icon="pi pi-sign-in"
+      ></button>
+    </form>
+    <!-- Footer -->
+    <div class="login-footer">
+      <p class="support-text">
+        Need help?
+        <button type="button" class="support-link" (click)="onContactSupport()">
+          Contact Support
+        </button>
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container">
+    <div
+      *ngFor="let toast of toastService.getToasts()()"
+      class="toast"
+      [class]="'toast-' + toast.type"
+    >
+      <div class="toast-icon">
+        <i
+          [class]="
+            toast.type === 'success' ? 'pi pi-check-circle' :
+            toast.type === 'error' ? 'pi pi-times-circle' :
+            toast.type === 'warning' ? 'pi pi-exclamation-triangle' :
+            'pi pi-info-circle'
+          "
+        ></i>
+      </div>
+      <div class="toast-content">
+        <div class="toast-title">{{ toast.title }}</div>
+        <div class="toast-message">{{ toast.message }}</div>
+      </div>
+      <button
+        class="toast-close"
+        (click)="toastService.remove(toast.id)"
+        type="button"
+      >
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Background Decoration -->
+  <div class="background-decoration">
+    <!-- Sports Equipment Floating Elements -->
+    <div class="sports-element basketball">
+      <div class="basketball-lines"></div>
+    </div>
+    <div class="sports-element tennis-ball">
+      <div class="tennis-curve"></div>
+    </div>
+    <div class="sports-element volleyball">
+      <div class="volleyball

@@ -1,0 +1,61 @@
+﻿<div class="login-container">
+  <div class="login-card">
+    <!-- Header Section -->
+    <div class="login-header">
+      <div class="logo-section">
+        <h1 class="app-title">AthletaX</h1>
+        <p class="app-tagline">One Platform. Every Sport. Every Athlete</p>
+      </div>
+      <h2 class="login-title">Welcome Back</h2>
+      <p class="login-subtitle">
+        Sign in to your account and continue your journey to excellence.
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <form class="login-form" (ngSubmit)="onLogin()" #loginForm="ngForm">
+      <!-- Username Field -->
+      <div class="form-group" [class.has-error]="!validation().username.valid && (validation().username.touched || formSubmitted())" [class.is-focused]="usernameFocused">
+        <label for="username" class="form-label">
+          <i class="pi pi-user field-icon"></i>
+          <span class="label-text">Username<span class="required-indicator">*</span></span>
+        </label>
+        <div class="input-wrapper">
+          <input
+            id="username"
+            type="text"
+            pInputText
+            class="form-input"
+            placeholder="Enter your username"
+            [(ngModel)]="credentials().username"
+            (ngModelChange)="onUsernameChange($event)"
+            name="username"
+            required
+            autocomplete="off"
+            (focus)="usernameFocused = true"
+            (blur)="usernameFocused = false"
+            [class.invalid]="!validation().username.valid && (validation().username.touched || formSubmitted())"
+            [class.valid]="validation().username.valid && validation().username.touched"
+          />
+          <i
+            class="validation-icon"
+            [class.pi-check-circle]="validation().username.valid && validation().username.touched"
+            [class.pi-exclamation-circle]="!validation().username.valid && (validation().username.touched || formSubmitted())"
+            [class.success]="validation().username.valid && validation().username.touched"
+            [class.error]="!validation().username.valid && (validation().username.touched || formSubmitted())"
+          ></i>
+        </div>
+        <div
+          class="error-message"
+          *ngIf="!validation().username.valid && (validation().username.touched || formSubmitted())"
+        >
+          <i class="pi pi-exclamation-triangle"></i>
+          {{ validation().username.message }}
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group" [class.has-error]="!validation().password.valid && (validation().password.touched || formSubmitted())" [class.is-focused]="passwordFocused">
+        <label for="password" class="form-label">
+          <i class="pi pi-lock field-icon"></i>
+          <span class="label-text
