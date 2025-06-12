@@ -49,14 +49,14 @@ export const routes: Routes = [
           import('./features/dashboard/dashboard').then(m => m.Dashboard),
       },
 
-      // Players routes
+      // Players route
       {
         path: 'players',
         loadComponent: () =>
           import('./features/dashboard/dashboard').then(m => m.Dashboard),
       },
 
-      // Invoices routes
+      // Invoices route
       {
         path: 'invoices',
         loadComponent: () =>
@@ -132,7 +132,7 @@ export const routes: Routes = [
           import('./features/dashboard/dashboard').then(m => m.Dashboard),
       },
 
-      // Development/Test routes
+      // Test/Demo routes
       {
         path: 'sidebar-demo',
         loadComponent: () =>
@@ -152,12 +152,10 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/topbar-test/topbar-test').then(m => m.TopbarTest),
       },
-
-      // Default redirect for /app
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard',
+        redirectTo: 'branch-dashboard',
       },
     ],
   },

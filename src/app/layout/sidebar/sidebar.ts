@@ -36,7 +36,10 @@ export class Sidebar implements OnInit {
   // Using signals for reactive state management
   selectedBranch = signal<Branch | null>(null);
   selectedSport = signal<SportType | null>(null);
-  isMobileMenuOpen = signal<boolean>(false);
+  isMobileMenuOpen = signal<boolean>(false); // Hover popup state for minimized sidebar
+  hoveredItem = signal<MenuItem | null>(null);
+  hoverTimeout: ReturnType<typeof setTimeout> | null = null;
+  hideTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     // Sync external mobile open state with internal state
@@ -48,88 +51,135 @@ export class Sidebar implements OnInit {
   isMinimizedState(): boolean {
     return this.isMinimized();
   }
-
   // Menu items configuration
   menuItems: MenuItem[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
       icon: 'pi-chart-line',
-      route: '/app/branch-dashboard',
+      route: '/app/dashboard',
       isActive: false,
     },
     {
       id: 'players',
       label: 'Players',
       icon: 'pi-users',
+      route: '/app/players',
       isActive: false,
-      children: [
-        {
-          id: 'all-players',
-          label: 'All Players',
-          icon: 'pi-list',
-          route: '/app/players',
-          isActive: false,
-        },
-        {
-          id: 'add-player',
-          label: 'Add Player',
-          icon: 'pi-plus',
-          route: '/app/players/add',
-          isActive: false,
-        },
-      ],
     },
     {
-      id: 'coaches',
-      label: 'Coaches',
-      icon: 'pi-user-edit',
+      id: 'invoices',
+      label: 'Invoices',
+      icon: 'pi-file-pdf',
+      route: '/app/invoices',
       isActive: false,
-      children: [
-        {
-          id: 'all-coaches',
-          label: 'All Coaches',
-          icon: 'pi-list',
-          route: '/app/coaches',
-          isActive: false,
-        },
-        {
-          id: 'add-coach',
-          label: 'Add Coach',
-          icon: 'pi-plus',
-          route: '/app/coaches/add',
-          isActive: false,
-        },
-      ],
     },
     {
-      id: 'training',
-      label: 'Training',
-      icon: 'pi-calendar',
+      id: 'masters',
+      label: 'Masters',
+      icon: 'pi-database',
       isActive: false,
       children: [
         {
-          id: 'schedules',
-          label: 'Schedules',
-          icon: 'pi-calendar-times',
-          route: '/app/training/schedules',
+          id: 'branch',
+          label: 'Branch',
+          icon: 'pi-building',
+          route: '/app/masters/branch',
+          isActive: false,
+        },
+        {
+          id: 'age-groups',
+          label: 'Age Groups',
+          icon: 'pi-users',
+          route: '/app/masters/age-groups',
           isActive: false,
         },
         {
           id: 'sessions',
           label: 'Sessions',
           icon: 'pi-clock',
-          route: '/app/training/sessions',
+          route: '/app/masters/sessions',
+          isActive: false,
+        },
+        {
+          id: 'membership-types',
+          label: 'Membership Types',
+          icon: 'pi-id-card',
+          route: '/app/masters/membership-types',
+          isActive: false,
+        },
+        {
+          id: 'products',
+          label: 'Products',
+          icon: 'pi-box',
+          route: '/app/masters/products',
+          isActive: false,
+        },
+        {
+          id: 'product-bundles',
+          label: 'Product Bundles',
+          icon: 'pi-th-large',
+          route: '/app/masters/product-bundles',
+          isActive: false,
+        },
+        {
+          id: 'discounts',
+          label: 'Discounts',
+          icon: 'pi-percentage',
+          route: '/app/masters/discounts',
+          isActive: false,
+        },
+        {
+          id: 'waiting-list',
+          label: 'Waiting List',
+          icon: 'pi-list',
+          route: '/app/masters/waiting-list',
+          isActive: false,
+        },
+        {
+          id: 'sports-types',
+          label: 'Sports Types',
+          icon: 'pi-circle',
+          route: '/app/masters/sports-types',
           isActive: false,
         },
       ],
     },
     {
-      id: 'management',
-      label: 'Management',
+      id: 'settings',
+      label: 'Settings',
       icon: 'pi-cog',
-      route: '/app/management-dashboard',
       isActive: false,
+      children: [
+        {
+          id: 'company',
+          label: 'Company',
+          icon: 'pi-building',
+          route: '/app/settings/company',
+          isActive: false,
+        },
+        {
+          id: 'users',
+          label: 'Users',
+          icon: 'pi-users',
+          route: '/app/settings/users',
+          isActive: false,
+        },
+        {
+          id: 'roles',
+          label: 'Roles',
+          icon: 'pi-user-edit',
+          route: '/app/settings/roles',
+          isActive: false,
+        },
+        {
+          id: 'permissions',
+          label: 'Permissions',
+          icon: 'pi-shield',
+          route: '/app/settings/permissions',
+          isActive: false,
+        },
+      ],
     },
   ];
 
@@ -264,5 +314,94 @@ export class Sidebar implements OnInit {
   // Helper method for ng-select option display
   getDisplayText(item: Branch | SportType | null): string {
     return item?.name || 'Select Option';
+  } // Show hover popup for minimized sidebar
+  showHoverPopup(item: MenuItem, event?: MouseEvent) {
+    if (!this.isMinimizedState()) return;
+
+    // Clear any existing timeouts
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
+
+    // Set timeout to show popup after a brief delay
+    this.hoverTimeout = setTimeout(() => {
+      this.hoveredItem.set(item);
+
+      // Position the popup next to the hovered item
+      if (event?.target) {
+        this.positionPopup(event.target as HTMLElement);
+      }
+    }, 150);
+  }
+
+  // Hide hover popup with delay
+  hideHoverPopup() {
+    // Clear show timeout if it's still pending
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+
+    // Set a longer delay before hiding to allow mouse movement to popup
+    this.hideTimeout = setTimeout(() => {
+      this.hoveredItem.set(null);
+    }, 300);
+  }
+
+  // Keep popup visible when hovering over it
+  keepPopupVisible() {
+    // Clear all timeouts to keep popup visible
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
+  }
+
+  // Hide popup immediately when leaving popup area
+  hidePopupImmediately() {
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = null;
+    }
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
+    this.hoveredItem.set(null);
+  }
+
+  // Position popup relative to hovered item
+  positionPopup(targetElement: HTMLElement) {
+    // Use setTimeout to ensure popup is rendered before positioning
+    setTimeout(() => {
+      const popup = document.querySelector(
+        '.minimized-hover-popup'
+      ) as HTMLElement;
+      if (!popup) return;
+
+      const rect = targetElement.getBoundingClientRect();
+      const popupHeight = popup.offsetHeight;
+      const viewportHeight = window.innerHeight;
+
+      // Calculate top position, ensuring popup stays within viewport
+      let top = rect.top;
+      if (top + popupHeight > viewportHeight) {
+        top = viewportHeight - popupHeight - 10;
+      }
+      if (top < 10) {
+        top = 10;
+      }
+
+      popup.style.top = `${top}px`;
+    }, 0);
   }
 }
