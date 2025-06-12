@@ -13,13 +13,18 @@ import { UserProfile } from './models/topbar.models';
 })
 export class Topbar {
   private router = inject(Router);
-  private toast = inject(ToastService); // Output event for mobile menu toggle
+  private toast = inject(ToastService);  // Output event for mobile menu toggle
   menuToggle = output<void>();
   // Output event for sidebar toggle (desktop)
   sidebarToggle = output<void>();
+  // Output event for content width toggle
+  contentWidthToggle = output<boolean>();
 
   // Input for sidebar minimized state
   isSidebarMinimized = input<boolean>(false);
+
+  // Content width state signal
+  isContentCompact = signal<boolean>(false);
 
   // User profile signal
   currentUser = signal<UserProfile>({
@@ -65,10 +70,15 @@ export class Topbar {
   toggleMobileMenu() {
     this.menuToggle.emit();
   }
-
   // Toggle desktop sidebar
   toggleDesktopSidebar() {
     this.sidebarToggle.emit();
+  }
+
+  // Toggle content width
+  toggleContentWidth() {
+    this.isContentCompact.update(isCompact => !isCompact);
+    this.contentWidthToggle.emit(this.isContentCompact());
   }
 
   // Toggle user menu dropdown

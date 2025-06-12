@@ -1,10 +1,10 @@
 <!-- Main Layout Container -->
-<div class="main-layout">
-  <!-- Top Bar -->
+<div class="main-layout">  <!-- Top Bar -->
   <app-topbar
     [isSidebarMinimized]="isSidebarMinimized()"
     (menuToggle)="toggleMobileSidebar()"
     (sidebarToggle)="toggleSidebarMinimization()"
+    (contentWidthToggle)="handleContentWidthToggle($event)"
   ></app-topbar>
 
   <!-- Layout Content -->
@@ -14,9 +14,10 @@
       [isMobileOpen]="isMobileSidebarOpen()"
       [isMinimized]="isSidebarMinimized()"
       (mobileClose)="closeMobileSidebar()"
-    ></app-sidebar>
-    <!-- Main Content Area -->
-    <main class="main-content" [class.sidebar-minimized]="isSidebarMinimized()">
+    ></app-sidebar>    <!-- Main Content Area -->
+    <main class="main-content" 
+          [class.sidebar-minimized]="isSidebarMinimized()"
+          [class.content-compact]="isContentCompact()">
       <div class="content-wrapper">
         <router-outlet></router-outlet>
       </div>

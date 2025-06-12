@@ -31,6 +31,36 @@
   overflow-y: auto;
   padding: 0;
   background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+/* Compact Content Mode */
+.main-content.content-compact .content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  background: #f8fafc;
+}
+
+/* Full Width Content Mode (default) */
+.main-content:not(.content-compact) .content-wrapper {
+  width: 100%;
+  padding: 0;
+}
+
+/* Responsive adjustments for compact mode */
+@media (max-width: 1400px) {
+  .main-content.content-compact .content-wrapper {
+    max-width: 1000px;
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-content.content-compact .content-wrapper {
+    max-width: 900px;
+    padding: 0 1rem;
+  }
 }
 
 /* Mobile Responsiveness */

@@ -25,9 +25,21 @@
       <i class="pi pi-bars"></i>
     </button>
   </div>
-
-  <!-- Right Section: User Profile & Notifications -->
+  <!-- Right Section: Content Width Toggle, User Profile & Notifications -->
   <div class="topbar-right">
+    <!-- Content Width Toggle -->
+    <div class="content-width-toggle">
+      <button
+        class="content-width-btn"
+        (click)="toggleContentWidth()"
+        [attr.aria-label]="isContentCompact() ? 'Switch to full width' : 'Switch to compact width'"
+        type="button"
+        title="{{ isContentCompact() ? 'Switch to full width' : 'Switch to compact width' }}"
+      >
+        <i class="pi" [class.pi-arrows-h]="isContentCompact()" [class.pi-arrows-alt]="!isContentCompact()"></i>
+      </button>
+    </div>
+
     <!-- Notifications -->
     <div class="notification-container">
       <button
