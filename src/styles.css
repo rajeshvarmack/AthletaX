@@ -1,22 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
-@import "primeicons/primeicons.css";
+@import 'primeicons/primeicons.css';
+@import '@ng-select/ng-select/themes/default.theme.css';
 
 /* Reusable Card Component */
 .card {
-  @apply bg-white rounded-xl shadow-md p-6 transition-shadow duration-200 hover:shadow-lg;
+  @apply rounded-xl bg-white p-6 shadow-md transition-shadow duration-200 hover:shadow-lg;
 }
 .card-header {
-  @apply flex items-center justify-center mb-4 text-3xl font-semibold text-gray-800;
+  @apply mb-4 flex items-center justify-center text-3xl font-semibold text-gray-800;
 }
 .card-content {
-  @apply text-gray-600 text-base;
+  @apply text-base text-gray-600;
 }
 
 /* Reusable App Background Gradient */
 .app-bg {
-  background: radial-gradient(circle at 60% 40%, #5f2c82 0%, #3a1c71 40%, #1a1440 100%);
+  background: radial-gradient(
+    circle at 60% 40%,
+    #5f2c82 0%,
+    #3a1c71 40%,
+    #1a1440 100%
+  );
   min-height: 100vh;
   width: 100%;
   display: flex;

@@ -1,0 +1,82 @@
+/* Main Layout Container */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Layout Content (Sidebar + Main Content) */
+.layout-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  margin-top: 64px; /* Account for fixed topbar height */
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  overflow: hidden;
+  margin-left: 280px; /* Account for sidebar width */
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.sidebar-minimized {
+  margin-left: 70px; /* Account for minimized sidebar width */
+}
+
+.content-wrapper {
+  height: 100%;
+  overflow-y: auto;
+  padding: 0;
+  background: #f8fafc;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 0; /* No sidebar margin on mobile */
+  }
+
+  .main-content.sidebar-open {
+    margin-left: 0;
+  }
+}
+
+/* Scrollbar Styling */
+.content-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content-wrapper::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .content-wrapper {
+    background: #0f172a;
+  }
+
+  .content-wrapper::-webkit-scrollbar-track {
+    background: #1e293b;
+  }
+
+  .content-wrapper::-webkit-scrollbar-thumb {
+    background: #475569;
+  }
+
+  .content-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+}

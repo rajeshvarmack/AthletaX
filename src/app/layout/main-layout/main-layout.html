@@ -1,0 +1,25 @@
+<!-- Main Layout Container -->
+<div class="main-layout">
+  <!-- Top Bar -->
+  <app-topbar
+    [isSidebarMinimized]="isSidebarMinimized()"
+    (menuToggle)="toggleMobileSidebar()"
+    (sidebarToggle)="toggleSidebarMinimization()"
+  ></app-topbar>
+
+  <!-- Layout Content -->
+  <div class="layout-content">
+    <!-- Sidebar -->
+    <app-sidebar
+      [isMobileOpen]="isMobileSidebarOpen()"
+      [isMinimized]="isSidebarMinimized()"
+      (mobileClose)="closeMobileSidebar()"
+    ></app-sidebar>
+    <!-- Main Content Area -->
+    <main class="main-content" [class.sidebar-minimized]="isSidebarMinimized()">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>

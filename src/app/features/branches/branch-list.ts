@@ -196,10 +196,19 @@ export class BranchList {
   get branches(): Branch[] {
     return this.branchesData.sort((a, b) => a.name.localeCompare(b.name));
   }
-
-  onBranchClick(_branch: Branch) {
-    // Navigate to branch details or dashboard
-    // this.router.navigate(['/branch', branch.id]);
+  onBranchClick(branch: Branch) {
+    // Navigate to branch dashboard (main layout) with branch context
+    this.toast.showSuccess(
+      'Branch Selected',
+      `Navigating to ${branch.name} - ${branch.location} management`
+    );
+    this.router.navigate(['/app/branch-dashboard'], {
+      queryParams: {
+        branchId: branch.id,
+        branchName: branch.name,
+        branchLocation: branch.location,
+      },
+    });
   }
 
   onBack() {

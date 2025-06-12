@@ -26,12 +26,9 @@ export class Home {
   onBranchesClick() {
     this.router.navigate(['/branches']);
   }
-
   onManagementClick() {
-    // Navigate to management dashboard
-    this.toast.showInfo(
-      'Coming Soon',
-      'Management dashboard will be available soon.'
-    );
+    // Navigate to main layout management dashboard
+    this.toast.showSuccess('Navigation', 'Opening management dashboard...');
+    this.router.navigate(['/app/management-dashboard']);
   }
 }
