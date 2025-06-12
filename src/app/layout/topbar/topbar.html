@@ -3,7 +3,7 @@
   class="topbar-container"
   [class.sidebar-minimized]="isSidebarMinimized()"
 >
-  <!-- Left Section: Menu Toggles -->
+  <!-- Left Section: Menu Toggles & Home Button -->
   <div class="topbar-left">
     <!-- Desktop Sidebar Toggle -->
     <button
@@ -24,23 +24,21 @@
     >
       <i class="pi pi-bars"></i>
     </button>
-  </div>
-  <!-- Right Section: Content Width Toggle, User Profile & Notifications -->
-  <div class="topbar-right">
-    <!-- Content Width Toggle -->
-    <div class="content-width-toggle">
-      <button
-        class="content-width-btn"
-        (click)="toggleContentWidth()"
-        [attr.aria-label]="isContentCompact() ? 'Switch to full width' : 'Switch to compact width'"
-        type="button"
-        title="{{ isContentCompact() ? 'Switch to full width' : 'Switch to compact width' }}"
-      >
-        <i class="pi" [class.pi-arrows-h]="isContentCompact()" [class.pi-arrows-alt]="!isContentCompact()"></i>
-      </button>
-    </div>
 
-    <!-- Notifications -->
+    <!-- Home Button -->
+    <button
+      class="home-btn"
+      (click)="navigateToHome()"
+      aria-label="Go to home page"
+      type="button"
+      title="Go to home page"
+    >
+      <i class="pi pi-home"></i>
+      <span class="home-label">Home</span>
+    </button>
+  </div>
+  <!-- Right Section: User Profile & Notifications -->
+  <div class="topbar-right">
     <div class="notification-container">
       <button
         class="notification-btn"

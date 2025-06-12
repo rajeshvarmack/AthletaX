@@ -57,7 +57,6 @@ interface BranchInfo {
           </div>
         </div>
       </div>
-
       <div class="dashboard-content">
         <div class="stats-grid">
           <div class="stat-card">
@@ -106,9 +105,12 @@ interface BranchInfo {
   styles: [
     `
       .dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 1.5rem;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        max-width: none;
       }
 
       .dashboard-header {
@@ -129,8 +131,9 @@ interface BranchInfo {
 
       .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 1.5rem;
+        width: 100%;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       }
 
       .stat-card {
@@ -179,10 +182,9 @@ interface BranchInfo {
         color: #1e293b;
         margin: 0;
       }
-
       @media (max-width: 768px) {
         .dashboard-container {
-          padding: 0 1rem;
+          padding: 1rem;
         }
 
         .stats-grid {

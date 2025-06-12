@@ -20,6 +20,9 @@
   overflow: hidden;
   margin-left: 280px; /* Account for sidebar width */
   transition: margin-left 0.3s ease;
+  position: relative;
+  width: auto;
+  max-width: none;
 }
 
 .main-content.sidebar-minimized {
@@ -29,38 +32,14 @@
 .content-wrapper {
   height: 100%;
   overflow-y: auto;
-  padding: 0;
+  overflow-x: hidden;
   background: #f8fafc;
   transition: all 0.3s ease;
-}
-
-/* Compact Content Mode */
-.main-content.content-compact .content-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  background: #f8fafc;
-}
-
-/* Full Width Content Mode (default) */
-.main-content:not(.content-compact) .content-wrapper {
   width: 100%;
-  padding: 0;
-}
-
-/* Responsive adjustments for compact mode */
-@media (max-width: 1400px) {
-  .main-content.content-compact .content-wrapper {
-    max-width: 1000px;
-    padding: 0 1.5rem;
-  }
-}
-
-@media (max-width: 1200px) {
-  .main-content.content-compact .content-wrapper {
-    max-width: 900px;
-    padding: 0 1rem;
-  }
+  padding: 1.5rem;
+  margin: 0;
+  max-width: none;
+  box-sizing: border-box;
 }
 
 /* Mobile Responsiveness */
@@ -71,6 +50,10 @@
 
   .main-content.sidebar-open {
     margin-left: 0;
+  }
+
+  .content-wrapper {
+    padding: 1rem;
   }
 }
 
@@ -108,5 +91,121 @@
 
   .content-wrapper::-webkit-scrollbar-thumb:hover {
     background: #64748b;
+  }
+}
+
+/* Content utilization helpers */
+.full-width-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width-grid {
+  display: grid;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+/* Auto-responsive grid for full-width mode */
+.main-content:not(.content-compact) .full-width-grid {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Specific grid layouts for different screen sizes in full-width mode */
+@media (min-width: 1200px) {
+  .main-content:not(.content-compact) .full-width-grid.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .main-content:not(.content-compact) .full-width-grid.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .main-content:not(.content-compact) .full-width-grid.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1600px) {
+  .main-content:not(.content-compact) .full-width-grid.grid-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .main-content:not(.content-compact) .full-width-grid.grid-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Compact mode grid adjustments */
+.main-content.content-compact .full-width-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  max-width: 100%;
+}
+
+.main-content.content-compact .full-width-grid.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.main-content.content-compact .full-width-grid.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Card and panel full-width optimizations */
+.content-card,
+.content-panel {
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.main-content:not(.content-compact) .content-card,
+.main-content:not(.content-compact) .content-panel {
+  /* Allow cards to use more space in full-width mode */
+  min-height: 200px;
+}
+
+.main-content.content-compact .content-card,
+.main-content.content-compact .content-panel {
+  /* More compact cards in compact mode */
+  min-height: 150px;
+}
+
+/* Table full-width optimizations */
+.content-table {
+  width: 100%;
+  overflow-x: auto;
+  margin: 0;
+}
+
+/* Dashboard specific optimizations */
+.dashboard-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-grid {
+  display: grid;
+  gap: 1.5rem;
+  flex: 1;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+@media (min-width: 1400px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1600px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 1920px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(6, 1fr);
   }
 }

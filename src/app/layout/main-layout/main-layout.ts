@@ -11,12 +11,11 @@ import { Topbar } from '../topbar/topbar';
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.css'],
 })
-export class MainLayout {  // Mobile sidebar state
+export class MainLayout {
+  // Mobile sidebar state
   isMobileSidebarOpen = signal<boolean>(false);
   // Desktop sidebar minimized state
   isSidebarMinimized = signal<boolean>(false);
-  // Content width state
-  isContentCompact = signal<boolean>(false);
 
   // Toggle mobile sidebar
   toggleMobileSidebar() {
@@ -26,14 +25,8 @@ export class MainLayout {  // Mobile sidebar state
   // Toggle desktop sidebar minimization
   toggleSidebarMinimization() {
     this.isSidebarMinimized.update(isMinimized => !isMinimized);
-  }
-  // Close mobile sidebar
+  } // Close mobile sidebar
   closeMobileSidebar() {
     this.isMobileSidebarOpen.set(false);
-  }
-
-  // Handle content width toggle from topbar
-  handleContentWidthToggle(isCompact: boolean) {
-    this.isContentCompact.set(isCompact);
   }
 }
