@@ -1,20 +1,23 @@
 <!-- Age Groups Management Page -->
-<div class="page-container-pure-white">
+<div class="min-h-screen border-2 border-gray-200 bg-white">
   <!-- Page Header -->
-  <div class="page-header-simple">
-    <div class="content-container">
+  <div class="mb-6 border-b border-gray-200 bg-white px-6 py-4">
+    <div class="w-full">
       <div class="flex items-center justify-between">
-        <div class="title-section">
-          <h1 class="page-title-compact">
+        <div>
+          <h1 class="flex items-center gap-2 text-2xl font-bold text-gray-900">
             <i class="pi pi-users text-purple-600"></i>
             Age Groups
           </h1>
-          <p class="page-subtitle-compact">
+          <p class="mt-1 text-sm text-gray-600">
             View and Manage age groups across all branches
           </p>
         </div>
-        <div class="header-actions">
-          <button class="btn-primary-compact" (click)="createAgeGroup()">
+        <div>
+          <button
+            class="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-white transition-colors hover:bg-purple-700"
+            (click)="createAgeGroup()"
+          >
             <i class="pi pi-plus"></i>
             Create
           </button>
@@ -23,16 +26,20 @@
     </div>
   </div>
   <!-- Main Content -->
-  <div class="content-container">
+  <div class="px-6">
     <!-- Single Main Card with Everything -->
-    <div class="main-content-card">
+    <div class="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
       <!-- Filter Cards Section -->
-      <div class="filter-section-compact">
-        <h3 class="filter-section-title">Filter Options</h3>
-        <div class="filter-grid-horizontal">
+      <div class="mb-6">
+        <h3 class="mb-4 text-base font-semibold text-gray-700">
+          Filter Options
+        </h3>
+        <div class="mb-4 flex flex-wrap gap-3">
           <div
-            class="filter-card-compact filter-card-all"
-            [class.active]="!selectedStatus()"
+            class="mb-0 flex h-9 max-h-9 min-h-9 max-w-28 min-w-20 flex-none cursor-pointer items-center justify-between border border-transparent bg-gradient-to-br from-gray-500 to-gray-600 p-2 text-white transition-all duration-200 hover:-translate-y-px hover:transform hover:shadow-lg"
+            [class.scale-105]="!selectedStatus()"
+            [class.shadow-lg]="!selectedStatus()"
+            [class.border-white]="!selectedStatus()"
             (click)="filterByStatus(null)"
             (keydown.enter)="filterByStatus(null)"
             (keydown.space)="filterByStatus(null)"
@@ -40,20 +47,29 @@
             role="button"
             aria-label="Show all status"
           >
-            <div class="filter-card-icon-compact">
+            <div
+              class="m-0 flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center text-xs"
+            >
               <i class="pi pi-list"></i>
             </div>
-            <div class="filter-card-text-compact">
-              <h4 class="filter-card-title-compact">All Status</h4>
+            <div class="mx-1 min-w-0 flex-1 px-0">
+              <h4
+                class="m-0 overflow-hidden text-xs leading-none font-semibold text-ellipsis whitespace-nowrap text-white"
+              >
+                All Status
+              </h4>
             </div>
-            <span class="filter-card-count-compact"
+            <span
+              class="bg-opacity-25 min-w-4 flex-shrink-0 bg-white px-1.5 py-0.5 text-center text-xs leading-tight font-bold text-white"
               >{{ getTotalByStatus(null) }}</span
             >
           </div>
           <div
-            class="filter-card-compact filter-card-active"
+            class="mb-0 flex h-9 max-h-9 min-h-9 max-w-28 min-w-20 flex-none cursor-pointer items-center justify-between border border-transparent bg-gradient-to-br from-green-600 to-green-700 p-2 text-white transition-all duration-200 hover:-translate-y-px hover:transform hover:shadow-lg"
             data-filter="active"
-            [class.active]="selectedStatus() === 'Active'"
+            [class.scale-105]="selectedStatus() === 'Active'"
+            [class.shadow-lg]="selectedStatus() === 'Active'"
+            [class.border-white]="selectedStatus() === 'Active'"
             (click)="filterByStatus('Active')"
             (keydown.enter)="filterByStatus('Active')"
             (keydown.space)="filterByStatus('Active')"
@@ -61,20 +77,29 @@
             role="button"
             aria-label="Filter by active status"
           >
-            <div class="filter-card-icon-compact">
+            <div
+              class="m-0 flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center text-xs"
+            >
               <i class="pi pi-check-circle"></i>
             </div>
-            <div class="filter-card-text-compact">
-              <h4 class="filter-card-title-compact">Active</h4>
+            <div class="mx-1 min-w-0 flex-1 px-0">
+              <h4
+                class="m-0 overflow-hidden text-xs leading-none font-semibold text-ellipsis whitespace-nowrap text-white"
+              >
+                Active
+              </h4>
             </div>
-            <span class="filter-card-count-compact"
+            <span
+              class="bg-opacity-25 min-w-4 flex-shrink-0 bg-white px-1.5 py-0.5 text-center text-xs leading-tight font-bold text-white"
               >{{ getTotalByStatus('Active') }}</span
             >
           </div>
           <div
-            class="filter-card-compact filter-card-inactive"
+            class="mb-0 flex h-9 max-h-9 min-h-9 max-w-28 min-w-20 flex-none cursor-pointer items-center justify-between border border-transparent bg-gradient-to-br from-red-600 to-red-700 p-2 text-white transition-all duration-200 hover:-translate-y-px hover:transform hover:shadow-lg"
             data-filter="inactive"
-            [class.active]="selectedStatus() === 'InActive'"
+            [class.scale-105]="selectedStatus() === 'InActive'"
+            [class.shadow-lg]="selectedStatus() === 'InActive'"
+            [class.border-white]="selectedStatus() === 'InActive'"
             (click)="filterByStatus('InActive')"
             (keydown.enter)="filterByStatus('InActive')"
             (keydown.space)="filterByStatus('InActive')"
@@ -82,22 +107,31 @@
             role="button"
             aria-label="Filter by inactive status"
           >
-            <div class="filter-card-icon-compact">
+            <div
+              class="m-0 flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center text-xs"
+            >
               <i class="pi pi-times-circle"></i>
             </div>
-            <div class="filter-card-text-compact">
-              <h4 class="filter-card-title-compact">Inactive</h4>
+            <div class="mx-1 min-w-0 flex-1 px-0">
+              <h4
+                class="m-0 overflow-hidden text-xs leading-none font-semibold text-ellipsis whitespace-nowrap text-white"
+              >
+                Inactive
+              </h4>
             </div>
-            <span class="filter-card-count-compact"
+            <span
+              class="bg-opacity-25 min-w-4 flex-shrink-0 bg-white px-1.5 py-0.5 text-center text-xs leading-tight font-bold text-white"
               >{{ getTotalByStatus('InActive') }}</span
             >
           </div>
         </div>
         <!-- Activity Filter Row -->
-        <div class="filter-grid-horizontal mt-4">
+        <div class="mt-4 flex flex-wrap gap-3">
           <div
-            class="filter-card-compact filter-card-all"
-            [class.active]="!selectedActivity()"
+            class="mb-0 flex h-9 max-h-9 min-h-9 max-w-28 min-w-20 flex-none cursor-pointer items-center justify-between border border-transparent bg-gradient-to-br from-gray-500 to-gray-600 p-2 text-white transition-all duration-200 hover:-translate-y-px hover:transform hover:shadow-lg"
+            [class.scale-105]="!selectedActivity()"
+            [class.shadow-lg]="!selectedActivity()"
+            [class.border-white]="!selectedActivity()"
             (click)="filterByActivity(null)"
             (keydown.enter)="filterByActivity(null)"
             (keydown.space)="filterByActivity(null)"
@@ -105,20 +139,29 @@
             role="button"
             aria-label="Show all activities"
           >
-            <div class="filter-card-icon-compact">
+            <div
+              class="m-0 flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center text-xs"
+            >
               <i class="pi pi-th-large"></i>
             </div>
-            <div class="filter-card-text-compact">
-              <h4 class="filter-card-title-compact">All Activity</h4>
+            <div class="mx-1 min-w-0 flex-1 px-0">
+              <h4
+                class="m-0 overflow-hidden text-xs leading-none font-semibold text-ellipsis whitespace-nowrap text-white"
+              >
+                All Activity
+              </h4>
             </div>
-            <span class="filter-card-count-compact"
+            <span
+              class="bg-opacity-25 min-w-4 flex-shrink-0 bg-white px-1.5 py-0.5 text-center text-xs leading-tight font-bold text-white"
               >{{ getTotalByActivity(null) }}</span
             >
           </div>
           <div
-            class="filter-card-compact filter-card-football"
+            class="mb-0 flex h-9 max-h-9 min-h-9 max-w-28 min-w-20 flex-none cursor-pointer items-center justify-between border border-transparent bg-gradient-to-br from-blue-600 to-blue-700 p-2 text-white transition-all duration-200 hover:-translate-y-px hover:transform hover:shadow-lg"
             data-filter="football"
-            [class.active]="selectedActivity()?.name === 'Football'"
+            [class.scale-105]="selectedActivity()?.name === 'Football'"
+            [class.shadow-lg]="selectedActivity()?.name === 'Football'"
+            [class.border-white]="selectedActivity()?.name === 'Football'"
             (click)="filterByActivity(getActivityByName('Football'))"
             (keydown.enter)="filterByActivity(getActivityByName('Football'))"
             (keydown.space)="filterByActivity(getActivityByName('Football'))"
@@ -126,20 +169,29 @@
             role="button"
             aria-label="Filter by football"
           >
-            <div class="filter-card-icon-compact">
+            <div
+              class="m-0 flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center text-xs"
+            >
               <i class="pi pi-globe"></i>
             </div>
-            <div class="filter-card-text-compact">
-              <h4 class="filter-card-title-compact">Football</h4>
+            <div class="mx-1 min-w-0 flex-1 px-0">
+              <h4
+                class="m-0 overflow-hidden text-xs leading-none font-semibold text-ellipsis whitespace-nowrap text-white"
+              >
+                Football
+              </h4>
             </div>
-            <span class="filter-card-count-compact"
+            <span
+              class="bg-opacity-25 min-w-4 flex-shrink-0 bg-white px-1.5 py-0.5 text-center text-xs leading-tight font-bold text-white"
               >{{ getTotalByActivity(getActivityByName('Football')) }}</span
             >
           </div>
           <div
-            class="filter-card-compact filter-card-swimming"
+            class="mb-0 flex h-9 max-h-9 min-h-9 max-w-28 min-w-20 flex-none cursor-pointer items-center justify-between border border-transparent bg-gradient-to-br from-purple-600 to-purple-700 p-2 text-white transition-all duration-200 hover:-translate-y-px hover:transform hover:shadow-lg"
             data-filter="swimming"
-            [class.active]="selectedActivity()?.name === 'Swimming'"
+            [class.scale-105]="selectedActivity()?.name === 'Swimming'"
+            [class.shadow-lg]="selectedActivity()?.name === 'Swimming'"
+            [class.border-white]="selectedActivity()?.name === 'Swimming'"
             (click)="filterByActivity(getActivityByName('Swimming'))"
             (keydown.enter)="filterByActivity(getActivityByName('Swimming'))"
             (keydown.space)="filterByActivity(getActivityByName('Swimming'))"
@@ -147,20 +199,29 @@
             role="button"
             aria-label="Filter by swimming"
           >
-            <div class="filter-card-icon-compact">
+            <div
+              class="m-0 flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center text-xs"
+            >
               <i class="pi pi-heart"></i>
             </div>
-            <div class="filter-card-text-compact">
-              <h4 class="filter-card-title-compact">Swimming</h4>
+            <div class="mx-1 min-w-0 flex-1 px-0">
+              <h4
+                class="m-0 overflow-hidden text-xs leading-none font-semibold text-ellipsis whitespace-nowrap text-white"
+              >
+                Swimming
+              </h4>
             </div>
-            <span class="filter-card-count-compact"
+            <span
+              class="bg-opacity-25 min-w-4 flex-shrink-0 bg-white px-1.5 py-0.5 text-center text-xs leading-tight font-bold text-white"
               >{{ getTotalByActivity(getActivityByName('Swimming')) }}</span
             >
           </div>
           <div
-            class="filter-card-compact filter-card-cricket"
+            class="mb-0 flex h-9 max-h-9 min-h-9 max-w-28 min-w-20 flex-none cursor-pointer items-center justify-between border border-transparent bg-gradient-to-br from-yellow-500 to-yellow-600 p-2 text-white transition-all duration-200 hover:-translate-y-px hover:transform hover:shadow-lg"
             data-filter="cricket"
-            [class.active]="selectedActivity()?.name === 'Cricket'"
+            [class.scale-105]="selectedActivity()?.name === 'Cricket'"
+            [class.shadow-lg]="selectedActivity()?.name === 'Cricket'"
+            [class.border-white]="selectedActivity()?.name === 'Cricket'"
             (click)="filterByActivity(getActivityByName('Cricket'))"
             (keydown.enter)="filterByActivity(getActivityByName('Cricket'))"
             (keydown.space)="filterByActivity(getActivityByName('Cricket'))"
@@ -168,50 +229,65 @@
             role="button"
             aria-label="Filter by cricket"
           >
-            <div class="filter-card-icon-compact">
+            <div
+              class="m-0 flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center text-xs"
+            >
               <i class="pi pi-star"></i>
             </div>
-            <div class="filter-card-text-compact">
-              <h4 class="filter-card-title-compact">Cricket</h4>
+            <div class="mx-1 min-w-0 flex-1 px-0">
+              <h4
+                class="m-0 overflow-hidden text-xs leading-none font-semibold text-ellipsis whitespace-nowrap text-white"
+              >
+                Cricket
+              </h4>
             </div>
-            <span class="filter-card-count-compact"
+            <span
+              class="bg-opacity-25 min-w-4 flex-shrink-0 bg-white px-1.5 py-0.5 text-center text-xs leading-tight font-bold text-white"
               >{{ getTotalByActivity(getActivityByName('Cricket')) }}</span
             >
           </div>
         </div>
       </div>
       <!-- Search and Actions Bar -->
-      <div class="search-container-compact">
-        <div class="search-input-wrapper-compact">
+      <div class="mb-6 flex items-center justify-start gap-2">
+        <div class="relative max-w-md flex-1">
           <i
             class="pi pi-search absolute top-1/2 left-3 -translate-y-1/2 transform text-gray-400"
           ></i>
           <input
             type="text"
-            class="search-input-compact"
+            class="w-full border border-gray-300 px-3 py-2 pl-10 text-sm transition-colors focus:border-purple-600 focus:shadow-[0_0_0_3px_rgba(124,58,237,0.1)] focus:outline-none"
             placeholder="Search age groups..."
             [value]="globalFilter()"
             (input)="globalFilter.set($any($event.target).value)"
           />
         </div>
-        <div class="search-buttons-group">
-          <button class="btn-clear-compact" (click)="clearFilters()">
+        <div class="flex flex-shrink-0 items-center gap-2">
+          <button
+            class="flex cursor-pointer items-center gap-2 rounded-lg border-none bg-gradient-to-br from-yellow-500 to-yellow-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_2px_4px_rgba(245,158,11,0.2)] transition-all duration-200 hover:-translate-y-px hover:transform hover:bg-gradient-to-br hover:from-yellow-600 hover:to-yellow-700 hover:shadow-[0_4px_12px_rgba(245,158,11,0.3)]"
+            (click)="clearFilters()"
+          >
             <i class="pi pi-filter-slash"></i>
             Clear
           </button>
-          <button class="btn-export-compact" (click)="exportData()">
+          <button
+            class="flex cursor-pointer items-center gap-2 rounded-lg border-none bg-gradient-to-br from-green-600 to-green-700 px-4 py-2 text-sm font-semibold text-white shadow-[0_2px_4px_rgba(5,150,105,0.2)] transition-all duration-200 hover:-translate-y-px hover:transform hover:bg-gradient-to-br hover:from-green-700 hover:to-green-800 hover:shadow-[0_4px_12px_rgba(5,150,105,0.3)]"
+            (click)="exportData()"
+          >
             <i class="pi pi-download"></i>
             Export
           </button>
         </div>
       </div>
-
       <!-- Loading State -->
-      <div class="loading-container-compact" *ngIf="loading()">
+      <div
+        class="flex flex-col items-center justify-center py-8"
+        *ngIf="loading()"
+      >
         <p-progressSpinner
           [style]="{ width: '40px', height: '40px' }"
         ></p-progressSpinner>
-        <p class="loading-text-compact">Loading age groups...</p>
+        <p class="mt-3 text-sm text-gray-600">Loading age groups...</p>
       </div>
 
       <!-- PrimeNG Data Table with Sorting -->
@@ -232,31 +308,49 @@
         >
           <ng-template pTemplate="header">
             <tr>
-              <th class="table-header-compact" pSortableColumn="name">
+              <th
+                class="border-b-0 bg-purple-600 px-4 py-3 text-xs font-semibold tracking-wider text-white uppercase"
+                pSortableColumn="name"
+              >
                 Name <p-sortIcon field="name"></p-sortIcon>
               </th>
-              <th class="table-header-compact" pSortableColumn="activity.name">
+              <th
+                class="border-b-0 bg-purple-600 px-4 py-3 text-xs font-semibold tracking-wider text-white uppercase"
+                pSortableColumn="activity.name"
+              >
                 Activity <p-sortIcon field="activity.name"></p-sortIcon>
               </th>
-              <th class="table-header-compact" pSortableColumn="minAge">
+              <th
+                class="border-b-0 bg-purple-600 px-4 py-3 text-xs font-semibold tracking-wider text-white uppercase"
+                pSortableColumn="minAge"
+              >
                 Age Range <p-sortIcon field="minAge"></p-sortIcon>
               </th>
-              <th class="table-header-compact" pSortableColumn="status">
+              <th
+                class="border-b-0 bg-purple-600 px-4 py-3 text-xs font-semibold tracking-wider text-white uppercase"
+                pSortableColumn="status"
+              >
                 Status <p-sortIcon field="status"></p-sortIcon>
               </th>
               <th
-                class="table-header-compact"
+                class="border-b-0 bg-purple-600 px-4 py-3 text-xs font-semibold tracking-wider text-white uppercase"
                 pSortableColumn="participantCount"
               >
                 Participants <p-sortIcon field="participantCount"></p-sortIcon>
               </th>
-              <th class="table-header-compact">Actions</th>
+              <th
+                class="border-b-0 bg-purple-600 px-4 py-3 text-xs font-semibold tracking-wider text-white uppercase"
+              >
+                Actions
+              </th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-group let-i="rowIndex">
-            <tr class="table-row-compact">
+            <tr
+              class="border-b border-gray-200 px-4 py-3 text-sm transition-colors hover:bg-gray-50"
+            >
               <td>
-                <div class="name-cell-compact">
+                <div class="px-4 py-3">
                   <strong class="text-sm text-gray-900"
                     >{{ group.name }}</strong
                   >
@@ -269,10 +363,14 @@
                 </div>
               </td>
               <td>
-                <div class="activity-cell-compact">
+                <div class="px-4 py-3">
                   <span
-                    class="activity-badge-oval"
-                    [class]="'activity-' + group.activity.name.toLowerCase()"
+                    class="inline-flex items-center gap-1.5 border-2 px-3 py-1.5 text-xs font-medium"
+                    [ngClass]="{
+                      'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-800 border-blue-600': group.activity.name.toLowerCase() === 'football',
+                      'bg-gradient-to-br from-purple-50 to-purple-100 text-purple-800 border-purple-600': group.activity.name.toLowerCase() === 'swimming',
+                      'bg-gradient-to-br from-yellow-50 to-yellow-100 text-yellow-800 border-yellow-600': group.activity.name.toLowerCase() === 'cricket'
+                    }"
                   >
                     <i
                       class="pi"
@@ -283,44 +381,47 @@
                 </div>
               </td>
               <td>
-                <span class="age-range-compact"
+                <span class="px-4 py-3 text-sm font-medium text-gray-700"
                   >{{ group.minAge }} - {{ group.maxAge }} Years</span
                 >
               </td>
               <td>
                 <span
-                  class="status-badge-oval"
-                  [class]="'status-' + group.status.toLowerCase()"
+                  class="inline-flex items-center gap-1.5 border-2 px-3 py-1.5 text-xs font-medium"
+                  [ngClass]="{
+                    'bg-gradient-to-br from-green-50 to-green-100 text-green-800 border-green-600': group.status.toLowerCase() === 'active',
+                    'bg-gradient-to-br from-red-50 to-red-100 text-red-800 border-red-600': group.status.toLowerCase() === 'inactive'
+                  }"
                 >
                   <i class="pi" [class]="getStatusIcon(group.status)"></i>
                   {{ group.status }}
                 </span>
               </td>
               <td>
-                <div class="participants-cell-compact">
-                  <span class="participant-count-compact"
+                <div class="px-4 py-3">
+                  <span class="text-sm font-semibold text-gray-700"
                     >{{ group.participantCount }}</span
                   >
                 </div>
               </td>
               <td>
-                <div class="actions-cell-compact">
+                <div class="flex items-center gap-1 px-4 py-3">
                   <button
-                    class="action-btn-compact view"
+                    class="inline-flex h-8 w-8 cursor-pointer items-center justify-center border-0 bg-blue-100 text-xs text-blue-600 transition-colors hover:bg-blue-200"
                     (click)="viewAgeGroup(group)"
                     title="View Details"
                   >
                     <i class="pi pi-eye"></i>
                   </button>
                   <button
-                    class="action-btn-compact edit"
+                    class="inline-flex h-8 w-8 cursor-pointer items-center justify-center border-0 bg-yellow-100 text-xs text-yellow-600 transition-colors hover:bg-yellow-200"
                     (click)="editAgeGroup(group)"
                     title="Edit Group"
                   >
                     <i class="pi pi-pencil"></i>
                   </button>
                   <button
-                    class="action-btn-compact delete"
+                    class="inline-flex h-8 w-8 cursor-pointer items-center justify-center border-0 bg-red-100 text-xs text-red-600 transition-colors hover:bg-red-200"
                     (click)="deleteAgeGroup(group)"
                     title="Delete Group"
                   >
@@ -333,8 +434,10 @@
           <ng-template pTemplate="emptymessage">
             <tr>
               <td colspan="6">
-                <div class="empty-state-compact">
-                  <div class="empty-illustration-compact">
+                <div
+                  class="flex flex-col items-center justify-center py-12 text-center"
+                >
+                  <div class="mb-4">
                     <i class="pi pi-users text-4xl text-gray-400"></i>
                   </div>
                   <h3 class="mb-2 text-lg font-semibold text-gray-700">
@@ -353,7 +456,7 @@
                     Get started by creating your first age group.
                   </p>
                   <button
-                    class="btn-primary-compact"
+                    class="flex cursor-pointer items-center gap-2 rounded-lg border-none bg-gradient-to-br from-purple-600 to-purple-700 px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_15px_rgba(139,92,246,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:transform hover:bg-gradient-to-br hover:from-purple-700 hover:to-purple-800 hover:shadow-[0_8px_25px_rgba(124,58,237,0.3)]"
                     (click)="createAgeGroup()"
                   >
                     <i class="pi pi-plus"></i>
