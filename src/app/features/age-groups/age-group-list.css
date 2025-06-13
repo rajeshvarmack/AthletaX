@@ -1,0 +1,561 @@
+/* PrimeNG Table Customization for Age Groups */
+:host ::ng-deep .p-datatable-sm .p-datatable-thead > tr > th {
+  background-color: #7c3aed;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+  border-bottom: none;
+}
+
+:host ::ng-deep .p-datatable-sm .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+:host ::ng-deep .p-datatable-sm .p-datatable-tbody > tr:hover {
+  background-color: #f9fafb;
+}
+
+:host ::ng-deep .p-datatable-sm .p-datatable-tbody > tr:hover > td {
+  background-color: transparent;
+}
+
+:host ::ng-deep .p-paginator {
+  background-color: white;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background-color: #7c3aed;
+  border-color: #7c3aed;
+  color: white;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page:hover {
+  background-color: #f3f4f6;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  transition: background-color 0.15s ease;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-scrollable-body {
+  border-radius: 0;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-wrapper {
+  border-radius: 0;
+}
+
+/* Custom scrollbar for table */
+:host ::ng-deep .p-datatable .p-datatable-scrollable-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+:host
+  ::ng-deep
+  .p-datatable
+  .p-datatable-scrollable-body::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 0;
+}
+
+:host
+  ::ng-deep
+  .p-datatable
+  .p-datatable-scrollable-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 0;
+}
+
+:host
+  ::ng-deep
+  .p-datatable
+  .p-datatable-scrollable-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* FIXED FILTER CARDS - Compact and Proper Width */
+.filter-grid-horizontal {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.filter-card-compact {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0.5rem 0.75rem !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid transparent !important;
+  /* FIXED WIDTH - Much smaller and more reasonable */
+  min-width: 90px !important;
+  max-width: 120px !important;
+  flex: 0 0 auto !important;
+  margin-bottom: 0 !important;
+}
+
+.filter-card-icon-compact {
+  flex-shrink: 0 !important;
+  font-size: 0.8rem !important;
+  width: 14px !important;
+  height: 14px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.filter-card-text-compact {
+  flex: 1 !important;
+  margin: 0 4px 0 6px !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+.filter-card-title-compact {
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.filter-card-count-compact {
+  flex-shrink: 0 !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-radius: 0 !important;
+  padding: 0.1rem 0.35rem !important;
+  min-width: 18px !important;
+  text-align: center !important;
+  line-height: 1.1 !important;
+}
+
+/* Colorful filter cards based on home component colors */
+.filter-card-all {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.filter-card-active {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.filter-card-inactive {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.filter-card-football {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.filter-card-swimming {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.filter-card-cricket {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: transparent;
+  color: white;
+}
+
+/* Override text colors for colorful cards */
+.filter-card-all *,
+.filter-card-active *,
+.filter-card-inactive *,
+.filter-card-football *,
+.filter-card-swimming *,
+.filter-card-cricket * {
+  color: white !important;
+}
+
+/* Enhanced active state */
+.filter-card-compact.active {
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid #ffffff !important;
+}
+
+.filter-card-compact:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Rectangular badges for table */
+.status-badge-oval,
+.activity-badge-oval {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 2px solid transparent;
+}
+
+.status-badge-oval.status-active {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  color: #047857;
+  border-color: #059669;
+}
+
+.status-badge-oval.status-inactive {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #dc2626;
+  border-color: #ef4444;
+}
+
+.activity-badge-oval.activity-football {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1d4ed8;
+  border-color: #2563eb;
+}
+
+.activity-badge-oval.activity-swimming {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  color: #6d28d9;
+  border-color: #7c3aed;
+}
+
+.activity-badge-oval.activity-cricket {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #b45309;
+  border-color: #d97706;
+}
+
+/* Date and participant cells */
+.date-cell-compact {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.participant-count-compact {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+/* FIXED BUTTON STYLES */
+.btn-primary-compact {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2) !important;
+}
+
+.btn-primary-compact:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3) !important;
+}
+
+.btn-clear-compact {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2) !important;
+}
+
+.btn-clear-compact:hover {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
+}
+
+.btn-export-compact {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2) !important;
+}
+
+.btn-export-compact:hover {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important;
+}
+
+/* FIXED HEADER STYLES - CLEAN WHITE BACKGROUND */
+.page-header-simple {
+  background: white !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  padding: 1.5rem 0 !important;
+  margin-bottom: 1.5rem !important;
+  position: relative !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 0 !important;
+}
+
+/* Updated title styling for white background */
+.page-title-compact {
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+/* Icon styling for white background */
+.page-title-compact i {
+  color: #7c3aed !important;
+  font-size: 1.5rem !important;
+}
+
+/* Subtitle styling for white background */
+.page-subtitle-compact {
+  font-size: 0.9rem !important;
+  color: #6b7280 !important;
+  margin: 0.5rem 0 0 0 !important;
+  font-weight: 400 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Enhanced Create button for purple header with theme matching background */
+.btn-primary-compact {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 8px !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2) !important;
+}
+
+.btn-primary-compact:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3) !important;
+}
+
+.btn-primary-compact i {
+  font-size: 0.85rem !important;
+  color: inherit !important;
+}
+
+/* FIXED MAIN CONTENT CARD - SAME WIDTH AS HEADER WITH ELEGANT BORDER - COMPLETELY FLAT */
+.main-content-card {
+  background: white !important;
+  /* Completely flat - no rounded corners */
+  border-radius: 0 !important;
+  padding: 1.5rem !important;
+  box-shadow:
+    0 4px 15px rgba(124, 58, 237, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.06) !important;
+  margin-bottom: 2rem !important;
+  /* Remove any margin that might make it narrower */
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  /* Beautiful complementary border */
+  border: 2px solid transparent !important;
+  border-top: 2px solid rgba(124, 58, 237, 0.15) !important;
+  border-left: 1px solid rgba(124, 58, 237, 0.08) !important;
+  border-right: 1px solid rgba(124, 58, 237, 0.08) !important;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.05) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Add subtle gradient border effect */
+.main-content-card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -1px !important;
+  left: -1px !important;
+  right: -1px !important;
+  height: 3px !important;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(124, 58, 237, 0.3) 25%,
+    rgba(124, 58, 237, 0.6) 50%,
+    rgba(124, 58, 237, 0.3) 75%,
+    transparent 100%
+  ) !important;
+  border-radius: 0 !important;
+  pointer-events: none !important;
+}
+
+.filter-section-compact {
+  margin-bottom: 1.5rem !important;
+}
+
+.filter-section-title {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  margin: 0 0 1rem 0 !important;
+}
+
+/* SEARCH CONTAINER FIXES */
+.search-container-compact {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  margin-bottom: 1.5rem !important;
+  gap: 0.5rem !important;
+}
+
+.search-input-wrapper-compact {
+  position: relative !important;
+  flex: 1 !important;
+  max-width: 400px !important;
+}
+
+.search-input-compact {
+  width: 100% !important;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0 !important;
+  font-size: 0.875rem !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.search-input-compact:focus {
+  outline: none !important;
+  border-color: #7c3aed !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1) !important;
+}
+
+/* SEARCH BUTTONS GROUP ALIGNMENT */
+.search-buttons-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* ENSURE CONSISTENT WIDTH ACROSS HEADER AND CONTENT */
+.content-container {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Enhanced page container with subtle white-matching border - COMPLETELY FLAT */
+.page-container-pure-white {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* Subtle border matching the white content background */
+  border: 2px solid #f3f4f6 !important;
+  /* Completely flat - no rounded corners */
+  border-radius: 0 !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+  /* Add subtle margin to show the border */
+  margin: 0.5rem !important;
+  /* Smooth transition for any hover effects */
+  transition: all 0.3s ease !important;
+  background: #ffffff !important;
+}
+
+/* Optional hover effect for the page container */
+.page-container-pure-white:hover {
+  border-color: #e5e7eb !important;
+  box-shadow:
+    0 8px 15px -3px rgba(0, 0, 0, 0.08),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Ensure header and content have same effective width */
+.page-header-simple .content-container,
+.content-container {
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filter-card-compact {
+    min-width: 120px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .filter-card-title-compact {
+    font-size: 0.75rem !important;
+  }
+
+  .filter-card-count-compact {
+    font-size: 0.7rem !important;
+    padding: 0.1rem 0.4rem !important;
+  }
+}

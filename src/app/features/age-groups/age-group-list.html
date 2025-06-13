@@ -1,0 +1,376 @@
+<!-- Age Groups Management Page -->
+<div class="page-container-pure-white">
+  <!-- Page Header -->
+  <div class="page-header-simple">
+    <div class="content-container">
+      <div class="flex items-center justify-between">
+        <div class="title-section">
+          <h1 class="page-title-compact">
+            <i class="pi pi-users text-purple-600"></i>
+            Age Groups
+          </h1>
+          <p class="page-subtitle-compact">
+            View and Manage age groups across all branches
+          </p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-primary-compact" (click)="createAgeGroup()">
+            <i class="pi pi-plus"></i>
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Main Content -->
+  <div class="content-container">
+    <!-- Single Main Card with Everything -->
+    <div class="main-content-card">
+      <!-- Filter Cards Section -->
+      <div class="filter-section-compact">
+        <h3 class="filter-section-title">Filter Options</h3>
+        <div class="filter-grid-horizontal">
+          <div
+            class="filter-card-compact filter-card-all"
+            [class.active]="!selectedStatus()"
+            (click)="filterByStatus(null)"
+            (keydown.enter)="filterByStatus(null)"
+            (keydown.space)="filterByStatus(null)"
+            tabindex="0"
+            role="button"
+            aria-label="Show all status"
+          >
+            <div class="filter-card-icon-compact">
+              <i class="pi pi-list"></i>
+            </div>
+            <div class="filter-card-text-compact">
+              <h4 class="filter-card-title-compact">All Status</h4>
+            </div>
+            <span class="filter-card-count-compact"
+              >{{ getTotalByStatus(null) }}</span
+            >
+          </div>
+          <div
+            class="filter-card-compact filter-card-active"
+            data-filter="active"
+            [class.active]="selectedStatus() === 'Active'"
+            (click)="filterByStatus('Active')"
+            (keydown.enter)="filterByStatus('Active')"
+            (keydown.space)="filterByStatus('Active')"
+            tabindex="0"
+            role="button"
+            aria-label="Filter by active status"
+          >
+            <div class="filter-card-icon-compact">
+              <i class="pi pi-check-circle"></i>
+            </div>
+            <div class="filter-card-text-compact">
+              <h4 class="filter-card-title-compact">Active</h4>
+            </div>
+            <span class="filter-card-count-compact"
+              >{{ getTotalByStatus('Active') }}</span
+            >
+          </div>
+          <div
+            class="filter-card-compact filter-card-inactive"
+            data-filter="inactive"
+            [class.active]="selectedStatus() === 'InActive'"
+            (click)="filterByStatus('InActive')"
+            (keydown.enter)="filterByStatus('InActive')"
+            (keydown.space)="filterByStatus('InActive')"
+            tabindex="0"
+            role="button"
+            aria-label="Filter by inactive status"
+          >
+            <div class="filter-card-icon-compact">
+              <i class="pi pi-times-circle"></i>
+            </div>
+            <div class="filter-card-text-compact">
+              <h4 class="filter-card-title-compact">Inactive</h4>
+            </div>
+            <span class="filter-card-count-compact"
+              >{{ getTotalByStatus('InActive') }}</span
+            >
+          </div>
+        </div>
+        <!-- Activity Filter Row -->
+        <div class="filter-grid-horizontal mt-4">
+          <div
+            class="filter-card-compact filter-card-all"
+            [class.active]="!selectedActivity()"
+            (click)="filterByActivity(null)"
+            (keydown.enter)="filterByActivity(null)"
+            (keydown.space)="filterByActivity(null)"
+            tabindex="0"
+            role="button"
+            aria-label="Show all activities"
+          >
+            <div class="filter-card-icon-compact">
+              <i class="pi pi-th-large"></i>
+            </div>
+            <div class="filter-card-text-compact">
+              <h4 class="filter-card-title-compact">All Activity</h4>
+            </div>
+            <span class="filter-card-count-compact"
+              >{{ getTotalByActivity(null) }}</span
+            >
+          </div>
+          <div
+            class="filter-card-compact filter-card-football"
+            data-filter="football"
+            [class.active]="selectedActivity()?.name === 'Football'"
+            (click)="filterByActivity(getActivityByName('Football'))"
+            (keydown.enter)="filterByActivity(getActivityByName('Football'))"
+            (keydown.space)="filterByActivity(getActivityByName('Football'))"
+            tabindex="0"
+            role="button"
+            aria-label="Filter by football"
+          >
+            <div class="filter-card-icon-compact">
+              <i class="pi pi-globe"></i>
+            </div>
+            <div class="filter-card-text-compact">
+              <h4 class="filter-card-title-compact">Football</h4>
+            </div>
+            <span class="filter-card-count-compact"
+              >{{ getTotalByActivity(getActivityByName('Football')) }}</span
+            >
+          </div>
+          <div
+            class="filter-card-compact filter-card-swimming"
+            data-filter="swimming"
+            [class.active]="selectedActivity()?.name === 'Swimming'"
+            (click)="filterByActivity(getActivityByName('Swimming'))"
+            (keydown.enter)="filterByActivity(getActivityByName('Swimming'))"
+            (keydown.space)="filterByActivity(getActivityByName('Swimming'))"
+            tabindex="0"
+            role="button"
+            aria-label="Filter by swimming"
+          >
+            <div class="filter-card-icon-compact">
+              <i class="pi pi-heart"></i>
+            </div>
+            <div class="filter-card-text-compact">
+              <h4 class="filter-card-title-compact">Swimming</h4>
+            </div>
+            <span class="filter-card-count-compact"
+              >{{ getTotalByActivity(getActivityByName('Swimming')) }}</span
+            >
+          </div>
+          <div
+            class="filter-card-compact filter-card-cricket"
+            data-filter="cricket"
+            [class.active]="selectedActivity()?.name === 'Cricket'"
+            (click)="filterByActivity(getActivityByName('Cricket'))"
+            (keydown.enter)="filterByActivity(getActivityByName('Cricket'))"
+            (keydown.space)="filterByActivity(getActivityByName('Cricket'))"
+            tabindex="0"
+            role="button"
+            aria-label="Filter by cricket"
+          >
+            <div class="filter-card-icon-compact">
+              <i class="pi pi-star"></i>
+            </div>
+            <div class="filter-card-text-compact">
+              <h4 class="filter-card-title-compact">Cricket</h4>
+            </div>
+            <span class="filter-card-count-compact"
+              >{{ getTotalByActivity(getActivityByName('Cricket')) }}</span
+            >
+          </div>
+        </div>
+      </div>
+      <!-- Search and Actions Bar -->
+      <div class="search-container-compact">
+        <div class="search-input-wrapper-compact">
+          <i
+            class="pi pi-search absolute top-1/2 left-3 -translate-y-1/2 transform text-gray-400"
+          ></i>
+          <input
+            type="text"
+            class="search-input-compact"
+            placeholder="Search age groups..."
+            [value]="globalFilter()"
+            (input)="globalFilter.set($any($event.target).value)"
+          />
+        </div>
+        <div class="search-buttons-group">
+          <button class="btn-clear-compact" (click)="clearFilters()">
+            <i class="pi pi-filter-slash"></i>
+            Clear
+          </button>
+          <button class="btn-export-compact" (click)="exportData()">
+            <i class="pi pi-download"></i>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-container-compact" *ngIf="loading()">
+        <p-progressSpinner
+          [style]="{ width: '40px', height: '40px' }"
+        ></p-progressSpinner>
+        <p class="loading-text-compact">Loading age groups...</p>
+      </div>
+
+      <!-- PrimeNG Data Table with Sorting -->
+      <div *ngIf="!loading()">
+        <p-table
+          [value]="paginatedAgeGroups()"
+          [paginator]="filteredAgeGroups().length > pageSize()"
+          [rows]="pageSize()"
+          [totalRecords]="filteredAgeGroups().length"
+          [rowsPerPageOptions]="[10, 20, 50]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} age groups"
+          styleClass="p-datatable-sm"
+          [scrollable]="true"
+          scrollHeight="600px"
+          sortField="name"
+          [sortOrder]="1"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="table-header-compact" pSortableColumn="name">
+                Name <p-sortIcon field="name"></p-sortIcon>
+              </th>
+              <th class="table-header-compact" pSortableColumn="activity.name">
+                Activity <p-sortIcon field="activity.name"></p-sortIcon>
+              </th>
+              <th class="table-header-compact" pSortableColumn="minAge">
+                Age Range <p-sortIcon field="minAge"></p-sortIcon>
+              </th>
+              <th class="table-header-compact" pSortableColumn="status">
+                Status <p-sortIcon field="status"></p-sortIcon>
+              </th>
+              <th
+                class="table-header-compact"
+                pSortableColumn="participantCount"
+              >
+                Participants <p-sortIcon field="participantCount"></p-sortIcon>
+              </th>
+              <th class="table-header-compact">Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-group let-i="rowIndex">
+            <tr class="table-row-compact">
+              <td>
+                <div class="name-cell-compact">
+                  <strong class="text-sm text-gray-900"
+                    >{{ group.name }}</strong
+                  >
+                  <small
+                    class="block text-xs text-gray-500"
+                    *ngIf="group.description"
+                  >
+                    {{ group.description }}
+                  </small>
+                </div>
+              </td>
+              <td>
+                <div class="activity-cell-compact">
+                  <span
+                    class="activity-badge-oval"
+                    [class]="'activity-' + group.activity.name.toLowerCase()"
+                  >
+                    <i
+                      class="pi"
+                      [class]="getActivityIcon(group.activity.name)"
+                    ></i>
+                    {{ group.activity.name }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <span class="age-range-compact"
+                  >{{ group.minAge }} - {{ group.maxAge }} Years</span
+                >
+              </td>
+              <td>
+                <span
+                  class="status-badge-oval"
+                  [class]="'status-' + group.status.toLowerCase()"
+                >
+                  <i class="pi" [class]="getStatusIcon(group.status)"></i>
+                  {{ group.status }}
+                </span>
+              </td>
+              <td>
+                <div class="participants-cell-compact">
+                  <span class="participant-count-compact"
+                    >{{ group.participantCount }}</span
+                  >
+                </div>
+              </td>
+              <td>
+                <div class="actions-cell-compact">
+                  <button
+                    class="action-btn-compact view"
+                    (click)="viewAgeGroup(group)"
+                    title="View Details"
+                  >
+                    <i class="pi pi-eye"></i>
+                  </button>
+                  <button
+                    class="action-btn-compact edit"
+                    (click)="editAgeGroup(group)"
+                    title="Edit Group"
+                  >
+                    <i class="pi pi-pencil"></i>
+                  </button>
+                  <button
+                    class="action-btn-compact delete"
+                    (click)="deleteAgeGroup(group)"
+                    title="Delete Group"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6">
+                <div class="empty-state-compact">
+                  <div class="empty-illustration-compact">
+                    <i class="pi pi-users text-4xl text-gray-400"></i>
+                  </div>
+                  <h3 class="mb-2 text-lg font-semibold text-gray-700">
+                    No Age Groups Found
+                  </h3>
+                  <p
+                    class="mb-4 text-sm text-gray-500"
+                    *ngIf="globalFilter() || selectedActivity() || selectedStatus()"
+                  >
+                    Try adjusting your search criteria or clearing filters.
+                  </p>
+                  <p
+                    class="mb-4 text-sm text-gray-500"
+                    *ngIf="!globalFilter() && !selectedActivity() && !selectedStatus()"
+                  >
+                    Get started by creating your first age group.
+                  </p>
+                  <button
+                    class="btn-primary-compact"
+                    (click)="createAgeGroup()"
+                  >
+                    <i class="pi pi-plus"></i>
+                    Create Age Group
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Messages -->
+<p-toast position="top-right"></p-toast>
+
+<!-- Confirmation Dialog -->
+<p-confirmDialog></p-confirmDialog>

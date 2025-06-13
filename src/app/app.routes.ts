@@ -72,7 +72,9 @@ export const routes: Routes = [
       {
         path: 'masters/age-groups',
         loadComponent: () =>
-          import('./features/dashboard/dashboard').then(m => m.Dashboard),
+          import('./features/age-groups/age-group-list').then(
+            m => m.AgeGroupList
+          ),
       },
       {
         path: 'masters/sessions',
