@@ -1,229 +1,337 @@
-<div class="login-container">
-  <div class="login-card">
-    <!-- Header Section -->
-    <div class="login-header">
-      <div class="logo-section">
-        <svg class="app-logo" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="32" cy="32" r="30" fill="url(#grad1)" stroke="#fff" stroke-width="2"/>
-          <defs>
-            <radialGradient id="grad1" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#a4508b"/>
-              <stop offset="100%" stop-color="#3a1c71"/>
-            </radialGradient>
-          </defs>
-          <!-- Trophy base -->
-          <rect x="26" y="40" width="12" height="6" rx="2" fill="#fff" fill-opacity="0.8"/>
-          <!-- Trophy cup -->
-          <ellipse cx="32" cy="32" rx="10" ry="12" fill="#fff" fill-opacity="0.9"/>
-          <!-- Handles -->
-          <path d="M22 32 Q14 28 22 24" stroke="#fff" stroke-width="2" fill="none"/>
-          <path d="M42 32 Q50 28 42 24" stroke="#fff" stroke-width="2" fill="none"/>
-          <!-- Star -->
-          <polygon points="32,26 33.8,30.2 38.4,30.6 34.8,33.4 36,38 32,35.2 28,38 29.2,33.4 25.6,30.6 30.2,30.2" fill="#a4508b"/>
-        </svg>
-        <h1 class="app-title">AthletaX</h1>
-        <p class="app-tagline">One Platform | Every Sport | Every Athlete</p>
-      </div>
-      <h2 class="login-title">Welcome Back</h2>
-      <p class="login-subtitle">
-        Sign in and Enter to Excel
-      </p>
-    </div>
+<!-- Login Container with Modern Gradient Background -->
+<div
+  class="relative flex min-h-screen items-center justify-center overflow-hidden"
+>
+  <!-- Animated Gradient Background -->
+  <div
+    class="absolute inset-0"
+    style="
+      background: linear-gradient(
+        135deg,
+        #4c1d95 0%,
+        #312e81 50%,
+        #1e1b4b 100%
+      );
+    "
+  ></div>
 
-    <!-- Login Form -->
-    <form class="login-form" (ngSubmit)="onLogin()" #loginForm="ngForm" autocomplete="off">
-      <!-- Username Field -->
-      <div class="form-group" [class.has-error]="!validation().username.valid && (validation().username.touched || formSubmitted())" [class.is-focused]="usernameFocused">
-        <label for="username" class="form-label">
-          <i class="pi pi-user field-icon"></i>
-          <span class="label-text">Username<span class="required-indicator">*</span></span>
-        </label>
-        <div class="input-wrapper">
-          <input
-            id="username"
-            type="text"            
-            class="form-input"
-            placeholder="Enter your username"
-            [(ngModel)]="credentials().username"
-            (ngModelChange)="onUsernameChange($event)"
-            name="username"
-            required
-            autocomplete="off"
-            (focus)="usernameFocused = true"
-            (blur)="usernameFocused = false"
-            [class.invalid]="!validation().username.valid && (validation().username.touched || formSubmitted())"
-            [class.valid]="validation().username.valid && validation().username.touched"
-          />          
-          <i
-            class="pi validation-icon"
-            [ngClass]="{
-              'pi-check-circle': validation().username.valid && validation().username.touched,
-              'pi-exclamation-circle': !validation().username.valid && (validation().username.touched || formSubmitted()),
-              'success': validation().username.valid && validation().username.touched,
-              'error': !validation().username.valid && (validation().username.touched || formSubmitted())
-            }"
-          ></i>
-        </div>
-        <div
-          class="error-message"
-          *ngIf="!validation().username.valid && (validation().username.touched || formSubmitted())"
-        >
-          <i class="pi pi-exclamation-triangle"></i>
-          {{ validation().username.message }}
-        </div>
-      </div>
-
-      <!-- Password Field -->
-      <div class="form-group" [class.has-error]="!validation().password.valid && (validation().password.touched || formSubmitted())" [class.is-focused]="passwordFocused">
-        <label for="password" class="form-label">
-          <i class="pi pi-lock field-icon"></i>
-          <span class="label-text">Password<span class="required-indicator">*</span></span>
-        </label>
-        <div class="password-wrapper">
-          <input
-            id="password"
-            name="password"
-            [type]="showPassword ? 'text' : 'password'"            
-            class="form-input password-input"
-            placeholder="Enter your password"
-            [(ngModel)]="credentials().password"
-            (ngModelChange)="onPasswordChange($event)"            
-            required
-            autocomplete="off"
-            (focus)="passwordFocused = true"
-            (blur)="passwordFocused = false"
-            [class.invalid]="!validation().password.valid && (validation().password.touched || formSubmitted())"
-            [class.valid]="validation().password.valid && validation().password.touched"
-          />
-          
-          <button
-            type="button"
-            class="password-toggle"
-            (click)="togglePasswordVisibility()"
-            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-            <fa-icon [icon]="showPassword ? faEyeSlash : faEye"></fa-icon>
-          </button>
-          <i
-            class="pi validation-icon password-validation-icon"
-            [ngClass]="{
-              'pi-check-circle': validation().password.valid && validation().password.touched,
-              'pi-exclamation-circle': !validation().password.valid && (validation().password.touched || formSubmitted()),
-              'success': validation().password.valid && validation().password.touched,
-              'error': !validation().password.valid && (validation().password.touched || formSubmitted())
-            }"
-          ></i>
-        </div>
-        <div
-          class="error-message"
-          *ngIf="!validation().password.valid && (validation().password.touched || formSubmitted())">
-          <i class="pi pi-exclamation-triangle"></i>
-          {{ validation().password.message }}
-        </div>
-      </div>
-
-      <!-- Remember Me & Forgot Password -->
-      <div class="form-options">
-        <div class="remember-me">
-          <input
-            id="rememberMe"
-            type="checkbox"
-            [(ngModel)]="rememberMe"
-            name="rememberMe"
-          />
-          <label for="rememberMe">Remember me</label>
-        </div>
-        <button
-          type="button"
-          class="forgot-password-link"
-          (click)="onForgotPassword()">
-          Forgot password?
-        </button>
-      </div>
-      <!-- Login Button -->
-      <button
-        type="submit"
-        pButton
-        class="login-button"
-        [loading]="isLoading()"
-        [disabled]="isLoading()"
-        label="&nbsp;&nbsp;Sign In"
-        icon="pi pi-sign-in"
-        iconPos="left"
-      ></button>
-    </form>
-    <!-- Footer -->
-    <div class="login-footer">
-      <p class="support-text">
-        Need help?
-        <button type="button" class="support-link" (click)="onContactSupport()">
-          Contact Support
-        </button>
-      </p>
-    </div>
-  </div>
-
-  <!-- Toast Container -->
-  <div class="toast-container">
+  <!-- Animated Background Elements -->
+  <div class="absolute inset-0 overflow-hidden">
+    <!-- Floating Orbs -->
     <div
-      *ngFor="let toast of toastService.getToasts()()"
-      class="toast"
-      [ngClass]="'toast-' + toast.type"
-    >
-      <div class="toast-icon">
-        <i
-          class="pi"
-          [ngClass]="
-            toast.type === 'success' ? 'pi-check-circle' :
-            toast.type === 'error' ? 'pi-times-circle' :
-            toast.type === 'warning' ? 'pi-exclamation-triangle' :
-            'pi-info-circle'
-          "
-        ></i>
-      </div>
-      <div class="toast-content">
-        <div class="toast-title">{{ toast.title }}</div>
-        <div class="toast-message">{{ toast.message }}</div>
-      </div>
-      <button
-        class="toast-close"
-        (click)="toastService.remove(toast.id)"
-        type="button"
-      >
-        <i class="pi pi-times"></i>
-      </button>
-    </div>
+      class="absolute top-20 left-20 h-64 w-64 animate-pulse rounded-full bg-purple-600/20 blur-xl"
+    ></div>
+    <div
+      class="absolute right-20 bottom-20 h-80 w-80 animate-pulse rounded-full bg-indigo-600/15 blur-xl delay-1000"
+    ></div>
+    <div
+      class="absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 transform animate-pulse rounded-full bg-violet-600/10 blur-2xl delay-500"
+    ></div>
+    <!-- Grid Pattern Overlay -->
+    <div
+      class="absolute inset-0 bg-gradient-to-br from-transparent via-white to-transparent opacity-20"
+    ></div>
   </div>
-  
-  <!-- Background Decoration -->
-  <div class="background-decoration">
-    <!-- Sports Equipment Floating Elements -->
-    <div class="sports-element basketball">
-      <div class="basketball-lines"></div>
-    </div>
-    <div class="sports-element tennis-ball">
-      <div class="tennis-curve"></div>
-    </div>
-    <div class="sports-element volleyball">
-      <div class="volleyball-panels"></div>
-    </div>
-    
-    <!-- Football (Soccer ball) on the left -->
-    <div class="sports-element football">
-      <div class="football-pattern"></div>
-    </div>
-    
-    <!-- Baseball on the left -->
-    <div class="sports-element baseball">
-      <div class="baseball-stitches"></div>
-    </div>
 
-    <!-- Athletic Track Pattern -->
-    <div class="track-pattern track-1"></div>
-    <div class="track-pattern track-2"></div>
+  <!-- Login Card -->
+  <div class="relative z-10 mx-4 w-full max-w-md space-y-8">
+    <!-- Glass Card Effect -->
+    <div
+      class="rounded-2xl border border-gray-200 bg-white p-8 shadow-2xl ring-1 ring-gray-100"
+    >
+      <!-- Header Section -->
+      <div class="text-center">
+        <!-- Logo with Glow Effect -->
+        <div class="mb-6 flex justify-center">
+          <div
+            class="flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-purple-700 to-indigo-800 shadow-lg shadow-purple-500/25"
+            style="
+              background: linear-gradient(135deg, #4c1d95 0%, #1e1b4b 100%);
+            "
+          >
+            <i class="pi pi-trophy text-2xl text-white"></i>
+          </div>
+        </div>
+        <!-- App Title -->
+        <h1
+          class="mb-2 bg-gradient-to-r from-purple-700 to-indigo-800 bg-clip-text text-3xl font-bold text-transparent"
+          style="
+            background: linear-gradient(135deg, #4c1d95 0%, #1e1b4b 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          "
+        >
+          NXAcademy
+        </h1>
+        <p class="mb-6 text-sm font-medium text-gray-600">
+          One Platform | Every Sport | Every Athlete
+        </p>
+        <!-- Welcome Message -->
+        <h2 id="login-heading" class="mb-2 text-xl font-semibold text-gray-800">
+          Welcome Back
+        </h2>
+        <p class="text-sm text-gray-600">Sign in to continue your journey</p>
+      </div>
+      <!-- Account Lockout Warning -->
+      <div
+        *ngIf="isAccountLocked()"
+        class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4"
+        role="alert"
+        aria-live="polite"
+      >
+        <div class="flex items-center">
+          <i class="pi pi-exclamation-triangle mr-2 text-red-600"></i>
+          <div>
+            <h3 class="text-sm font-medium text-red-800">
+              Account Temporarily Locked
+            </h3>
+            <p class="mt-1 text-sm text-red-700">
+              Too many failed login attempts. Please try again in {{
+              (remainingLockoutTime() / 60000) | number:'1.0-0' }} minutes.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Login Form -->
+      <form
+        class="login-form mt-8 space-y-6"
+        (ngSubmit)="onLogin()"
+        #loginForm="ngForm"
+        novalidate
+        role="form"
+        aria-labelledby="login-heading"
+        [attr.aria-disabled]="isAccountLocked()"
+        autocomplete="off"
+        spellcheck="false"
+      >
+        <!-- Hidden honeypot fields to confuse browser autofill -->
+        <div style="position: absolute; left: -9999px; visibility: hidden">
+          <input
+            type="text"
+            name="username"
+            tabindex="-1"
+            autocomplete="username"
+          />
+          <input
+            type="password"
+            name="password"
+            tabindex="-1"
+            autocomplete="current-password"
+          />
+        </div>
+        <!-- Username Field -->
+        <div>
+          <label
+            for="username"
+            class="mb-2 block text-sm font-medium text-gray-700"
+          >
+            Username <span class="text-custom-purple-light">*</span>
+          </label>
+          <div class="relative">
+            <div
+              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+            >
+              <i class="pi pi-user text-custom-purple-light"></i>
+            </div>
+            <input
+              id="username"
+              type="text"
+              name="username-field"
+              class="focus:ring-custom-purple-light block w-full rounded-lg border border-gray-300 bg-white py-3 pr-10 pl-10 text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none"
+              [class.border-red-400]="!validation().username.valid && (validation().username.touched || formSubmitted())"
+              [class.border-green-400]="validation().username.valid && validation().username.touched"
+              placeholder="Enter your username"
+              [(ngModel)]="credentials().username"
+              (ngModelChange)="onUsernameChange($event)"
+              (focus)="usernameFocused.set(true)"
+              (blur)="usernameFocused.set(false); markFieldAsTouched('username')"
+              required
+              autocomplete="new-password"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              data-form-type="other"
+              readonly
+              (click)="makeFieldEditable($event)"
+              #usernameInput
+            />
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+              <i
+                *ngIf="validation().username.touched || formSubmitted()"
+                class="pi text-sm"
+                [class.pi-check-circle]="validation().username.valid"
+                [class.text-green-400]="validation().username.valid"
+                [class.pi-times-circle]="!validation().username.valid"
+                [class.text-red-400]="!validation().username.valid"
+              ></i>
+            </div>
+          </div>
+          <div
+            *ngIf="!validation().username.valid && (validation().username.touched || formSubmitted())"
+            class="mt-2 flex items-center text-sm text-red-600"
+          >
+            <i class="pi pi-exclamation-triangle mr-1"></i>
+            {{ validation().username.message }}
+          </div>
+        </div>
 
-    <!-- Goal Posts -->
-    <div class="goal-post left-goal">
-      <div class="goal-frame"></div>
+        <!-- Password Field -->
+        <div>
+          <label
+            for="password"
+            class="mb-2 block text-sm font-medium text-gray-700"
+          >
+            Password <span class="text-custom-purple-light">*</span>
+          </label>
+          <div class="relative">
+            <div
+              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+            >
+              <i class="pi pi-lock text-custom-purple-light"></i>
+            </div>
+            <input
+              id="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              name="password-field"
+              class="focus:ring-custom-purple-light block w-full rounded-lg border border-gray-300 bg-white py-3 pr-20 pl-10 text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none"
+              [class.border-red-400]="!validation().password.valid && (validation().password.touched || formSubmitted())"
+              [class.border-green-400]="validation().password.valid && validation().password.touched"
+              placeholder="Enter your password"
+              [(ngModel)]="credentials().password"
+              (ngModelChange)="onPasswordChange($event)"
+              (focus)="passwordFocused.set(true)"
+              (blur)="passwordFocused.set(false); markFieldAsTouched('password')"
+              required
+              autocomplete="new-password"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              data-form-type="other"
+              readonly
+              (click)="makeFieldEditable($event)"
+            />
+            <div class="absolute inset-y-0 right-0 flex items-center">              <button
+                type="button"
+                class="text-custom-purple-light hover:text-custom-purple-dark px-3 py-2 transition-colors duration-200 focus:outline-none cursor-pointer"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+              >
+                <i
+                  class="pi"
+                  [class.pi-eye]="!showPassword"
+                  [class.pi-eye-slash]="showPassword()"
+                ></i>
+              </button>
+              <div class="pr-3">
+                <i
+                  *ngIf="validation().password.touched || formSubmitted()"
+                  class="pi text-sm"
+                  [class.pi-check-circle]="validation().password.valid"
+                  [class.text-green-400]="validation().password.valid"
+                  [class.pi-times-circle]="!validation().password.valid"
+                  [class.text-red-400]="!validation().password.valid"
+                ></i>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="!validation().password.valid && (validation().password.touched || formSubmitted())"
+            class="mt-2 flex items-center text-sm text-red-600"
+          >
+            <i class="pi pi-exclamation-triangle mr-1"></i>
+            {{ validation().password.message }}
+          </div>
+        </div>
+
+        <!-- Password Strength Indicator -->
+        <div
+          *ngIf="credentials().password && passwordFocused()"
+          class="mt-2 space-y-1"
+        >
+          <div class="text-xs text-gray-600">Password strength:</div>
+          <div class="flex space-x-1">
+            <div
+              class="h-1 w-full rounded-full transition-colors duration-200"
+              [class.bg-red-400]="getPasswordStrength() === 'weak'"
+              [class.bg-yellow-400]="getPasswordStrength() === 'medium'"
+              [class.bg-green-400]="getPasswordStrength() === 'strong'"
+              [class.bg-gray-200]="!credentials().password"
+            ></div>
+          </div>
+          <div class="text-xs text-gray-500">
+            {{ getPasswordStrengthText() }}
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input
+              id="rememberMe"
+              type="checkbox"
+              name="rememberMe"
+              [(ngModel)]="rememberMe"
+              class="text-custom-purple-light focus:ring-custom-purple-light h-4 w-4 rounded border-gray-300 bg-white"
+            />            <label for="rememberMe" class="ml-2 block text-sm text-gray-600 cursor-pointer">
+              Remember me
+            </label>
+          </div>          <button
+            type="button"
+            class="text-custom-purple-light hover:text-custom-purple-dark text-sm font-medium transition-colors duration-200 cursor-pointer"
+            (click)="onForgotPassword()"
+          >
+            Forgot password?
+          </button>
+        </div>
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          [disabled]="isLoading()"
+          class="flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-purple-700 to-indigo-800 px-4 py-3 font-semibold text-white shadow-lg shadow-purple-500/25 transition-all duration-200 hover:from-purple-800 hover:to-indigo-900 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          style="background: linear-gradient(135deg, #4c1d95 0%, #1e1b4b 100%)"
+        >
+          <span *ngIf="!isLoading()" class="flex items-center">
+            <i class="pi pi-sign-in mr-2"></i>
+            Sign In
+          </span>
+          <span *ngIf="isLoading()" class="flex items-center">
+            <svg
+              class="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Signing in...
+          </span>
+        </button>
+      </form>
+      <!-- Support Link -->
+      <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">
+          Need help?          <button
+            type="button"
+            class="text-custom-purple-light hover:text-custom-purple-dark ml-1 font-medium transition-colors duration-200 cursor-pointer"
+            (click)="onContactSupport()"
+          >
+            Contact Support
+          </button>
+        </p>
+      </div>
     </div>
   </div>
 </div>
