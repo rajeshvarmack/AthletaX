@@ -1,13 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html,ts}'],
-  theme: {
+  content: ['./src/**/*.{html,ts}'],  theme: {
     extend: {
       colors: {
         'custom-purple': {
-          light: '#4c1d95', // Custom purple light
-          medium: '#312e81', // Custom purple medium
-          dark: '#1e1b4b', // Custom purple dark
+          light: '#4c1d95',   // Custom purple light
+          medium: '#312e81',  // Custom purple medium  
+          dark: '#1e1b4b',    // Custom purple dark
         },
       },
       animation: {

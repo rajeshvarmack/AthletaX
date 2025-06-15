@@ -2,47 +2,62 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  computed,
-  ElementRef,
   inject,
-  OnDestroy,
+  OnInit,
   signal,
-  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { Subject } from 'rxjs';
+import { ToastModule } from 'primeng/toast';
+
+// Type definitions for better type safety
+interface FieldValidation {
+  readonly touched: boolean;
+  readonly valid: boolean;
+  readonly message: string;
+}
 
 interface ValidationState {
-  username: {
-    touched: boolean;
-    valid: boolean;
-    message: string;
-  };
-  password: {
-    touched: boolean;
-    valid: boolean;
-    message: string;
-  };
+  readonly username: FieldValidation;
+  readonly password: FieldValidation;
+}
+
+interface LoginCredentials {
+  readonly username: string;
+  readonly password: string;
 }
 
 interface LoginAttempt {
-  timestamp: number;
-  count: number;
+  readonly timestamp: number;
+  readonly success: boolean;
+  readonly ip?: string;
 }
 
-interface SecurityConfig {
-  maxAttempts: number;
-  lockoutDuration: number; // in milliseconds
-  attemptWindow: number; // in milliseconds
-}
+// Enhanced constants with better categorization
+const VALIDATION_RULES = {
+  USERNAME_MIN_LENGTH: 3,
+  PASSWORD_MIN_LENGTH: 6,
+  MAX_FAILED_ATTEMPTS: 5,
+  LOCKOUT_DURATION: 15 * 60 * 1000, // 15 minutes
+  AUTOFILL_CLEAR_DELAY: 100,
+} as const;
+
+const UI_CONSTANTS = {
+  FOCUS_DELAY: 100,
+  ANIMATION_DURATION: 300,
+  LOADING_SIMULATION: 1500,
+} as const;
+
+const TOAST_LIFETIMES = {
+  SUCCESS: 3000,
+  ERROR: 4000,
+  INFO: 3000,
+  WARNING: 5000,
+} as const;
 
 @Component({
   selector: 'app-login',
@@ -51,40 +66,28 @@ interface SecurityConfig {
     CommonModule,
     FormsModule,
     ButtonModule,
+    ToastModule,
     InputTextModule,
-    PasswordModule,
-    CheckboxModule,
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [MessageService],
 })
-export class LoginComponent implements OnDestroy, AfterViewInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   private readonly _messageService = inject(MessageService);
   private readonly _router = inject(Router);
-  private readonly _cdr = inject(ChangeDetectorRef);
-  private readonly _destroy$ = new Subject<void>();
 
-  @ViewChild('usernameInput') usernameInput!: ElementRef<HTMLInputElement>;
-  // Form state signals - initialize with empty values
-  credentials = signal({
+  // Track focus state for form inputs
+  usernameFocused = false;
+  passwordFocused = false;
+  // Form state with signals and better typing
+  credentials = signal<LoginCredentials>({
     username: '',
     password: '',
   });
 
-  constructor() {
-    // Clear any potential cached data on component initialization
-    this.clearFormData();
-  }
-  // UI state signals
-  isLoading = signal(false);
-  showPassword = signal(false);
-  formSubmitted = signal(false);
-  rememberMe = signal(false);
-  usernameFocused = signal(false);
-  passwordFocused = signal(false);
-
-  // Validation state
+  // Validation state with proper typing
   validation = signal<ValidationState>({
     username: {
       touched: false,
@@ -98,114 +101,114 @@ export class LoginComponent implements OnDestroy, AfterViewInit {
     },
   });
 
-  // Security configuration
-  private readonly securityConfig: SecurityConfig = {
-    maxAttempts: 5,
-    lockoutDuration: 15 * 60 * 1000, // 15 minutes
-    attemptWindow: 15 * 60 * 1000, // 15 minutes
+  // Additional form state with better organization
+  readonly formState = {
+    rememberMe: signal(false),
+    isLoading: signal(false),
+    showPassword: signal(false),
+    formSubmitted: signal(false),
   };
 
-  // Rate limiting state
-  private loginAttempts = signal<LoginAttempt>({
-    timestamp: Date.now(),
-    count: 0,
-  });
+  // Legacy properties for template compatibility
+  get rememberMe() {
+    return this.formState.rememberMe();
+  }
+  set rememberMe(value: boolean) {
+    this.formState.rememberMe.set(value);
+  }
 
-  // Computed properties for form validation
-  isFormValid = computed(() => {
-    const v = this.validation();
-    return v.username.valid && v.password.valid;
-  });
-  canSubmit = computed(() => {
-    const creds = this.credentials();
-    return (
-      this.isFormValid() &&
-      creds.username.trim() &&
-      creds.password &&
-      !this.isLoading() &&
-      !this.isAccountLocked()
-    );
-  });
+  get isLoading() {
+    return this.formState.isLoading;
+  }
+  get showPassword() {
+    return this.formState.showPassword();
+  }
+  get formSubmitted() {
+    return this.formState.formSubmitted;
+  }
 
-  // Security computed properties
-  isAccountLocked = computed(() => {
-    const attempts = this.loginAttempts();
-    const now = Date.now();
-    const timeSinceLastAttempt = now - attempts.timestamp;
+  // Account lockout tracking with enhanced typing
+  private readonly securityState = {
+    failedAttempts: signal(0),
+    lockoutUntil: signal<number | null>(null),
+    attemptHistory: signal<LoginAttempt[]>([]),
+  };
+  // Computed properties for account lockout
+  isAccountLocked(): boolean {
+    const lockoutTime = this.securityState.lockoutUntil();
+    return lockoutTime !== null && Date.now() < lockoutTime;
+  }
 
-    return (
-      attempts.count >= this.securityConfig.maxAttempts &&
-      timeSinceLastAttempt < this.securityConfig.lockoutDuration
-    );
-  });
-
-  remainingLockoutTime = computed(() => {
-    if (!this.isAccountLocked()) return 0;
-    const attempts = this.loginAttempts();
-    const now = Date.now();
-    const elapsed = now - attempts.timestamp;
-    return Math.max(0, this.securityConfig.lockoutDuration - elapsed);
-  });
-
-  ngOnDestroy(): void {
-    this._destroy$.next();
-    this._destroy$.complete();
+  remainingLockoutTime(): number {
+    const lockoutTime = this.securityState.lockoutUntil();
+    if (lockoutTime === null) return 0;
+    return Math.max(0, lockoutTime - Date.now());
+  }
+  // Lifecycle hooks
+  ngOnInit(): void {
+    // Clear any existing form state on component initialization
+    this.credentials.set({ username: '', password: '' });
+    this.formSubmitted.set(false);
   }
 
   ngAfterViewInit(): void {
-    // Focus the username input after the view is initialized
-    setTimeout(() => {
-      if (this.usernameInput) {
-        this.usernameInput.nativeElement.focus();
-        // Remove readonly after a short delay to prevent autofill
-        this.removeReadonlyFromFields();
-      }
-    }, 100);
+    // Set focus on username field after view is initialized
+    this.focusUsernameField();
   }
 
-  // Remove readonly attribute to make fields editable
-  removeReadonlyFromFields(): void {
+  // Private helper methods
+  private focusUsernameField(): void {
     setTimeout(() => {
-      const usernameField = document.getElementById(
+      const usernameInput = document.getElementById(
         'username'
       ) as HTMLInputElement;
-      const passwordField = document.getElementById(
-        'password'
-      ) as HTMLInputElement;
-
-      if (usernameField) {
-        usernameField.removeAttribute('readonly');
+      if (usernameInput) {
+        usernameInput.focus();
+        this.usernameFocused = true;
       }
-      if (passwordField) {
-        passwordField.removeAttribute('readonly');
-      }
-    }, 500);
+    }, UI_CONSTANTS.FOCUS_DELAY); // Small delay to ensure the DOM is ready
   }
+  private recordFailedAttempt(): void {
+    const attempts = this.securityState.failedAttempts() + 1;
+    this.securityState.failedAttempts.set(attempts);
 
-  // Make field editable when clicked
-  makeFieldEditable(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    if (target) {
-      target.removeAttribute('readonly');
-      target.focus();
+    // Record attempt in history
+    const attempt: LoginAttempt = {
+      timestamp: Date.now(),
+      success: false,
+    };
+    this.securityState.attemptHistory.update(history => [...history, attempt]);
+
+    if (attempts >= VALIDATION_RULES.MAX_FAILED_ATTEMPTS) {
+      this.securityState.lockoutUntil.set(
+        Date.now() + VALIDATION_RULES.LOCKOUT_DURATION
+      );
     }
   }
 
-  // Clear all form data and reset state
-  clearFormData(): void {
-    this.credentials.set({ username: '', password: '' });
-    this.validation.set({
-      username: { touched: false, valid: true, message: '' },
-      password: { touched: false, valid: true, message: '' },
-    });
-    this.formSubmitted.set(false);
-    this.showPassword.set(false);
-    this.usernameFocused.set(false);
-    this.passwordFocused.set(false);
+  private resetFailedAttempts(): void {
+    this.securityState.failedAttempts.set(0);
+    this.securityState.lockoutUntil.set(null);
+
+    // Record successful attempt
+    const attempt: LoginAttempt = {
+      timestamp: Date.now(),
+      success: true,
+    };
+    this.securityState.attemptHistory.update(history => [...history, attempt]);
   }
 
-  // Mark field as touched for validation
-  markFieldAsTouched(fieldName: 'username' | 'password') {
+  private clearAutofillStyles(inputId: string): void {
+    setTimeout(() => {
+      const input = document.getElementById(inputId) as HTMLInputElement;
+      if (input) {
+        input.style.backgroundColor = '';
+        input.style.color = '';
+      }
+    }, VALIDATION_RULES.AUTOFILL_CLEAR_DELAY);
+  }
+  // Form field management
+  markFieldAsTouched(fieldName: 'username' | 'password'): void {
     this.validation.update(state => ({
       ...state,
       [fieldName]: {
@@ -214,118 +217,72 @@ export class LoginComponent implements OnDestroy, AfterViewInit {
       },
     }));
   }
-  // Enhanced validation methods with security considerations
-  validateUsername(username: string) {
-    const trimmedUsername = username.trim();
-
-    if (!trimmedUsername) {
+  // Validation methods using constants
+  private validateUsername(username: string): {
+    valid: boolean;
+    message: string;
+  } {
+    if (!username.trim()) {
       return { valid: false, message: 'Username is required' };
     }
-    if (trimmedUsername.length < 3) {
+    if (username.length < VALIDATION_RULES.USERNAME_MIN_LENGTH) {
       return {
         valid: false,
-        message: 'Username must be at least 3 characters',
-      };
-    }
-    if (trimmedUsername.length > 50) {
-      return {
-        valid: false,
-        message: 'Username cannot exceed 50 characters',
-      };
-    } // Basic sanitization - prevent common injection patterns
-    const sanitizedUsername = trimmedUsername.replace(/[<>"']/g, '');
-    if (sanitizedUsername !== trimmedUsername) {
-      return {
-        valid: false,
-        message: 'Username contains invalid characters',
+        message: `Username must be at least ${VALIDATION_RULES.USERNAME_MIN_LENGTH} characters`,
       };
     }
     return { valid: true, message: '' };
   }
 
-  validatePassword(password: string) {
+  private validatePassword(password: string): {
+    valid: boolean;
+    message: string;
+  } {
     if (!password) {
       return { valid: false, message: 'Password is required' };
     }
-    if (password.length < 8) {
+    if (password.length < VALIDATION_RULES.PASSWORD_MIN_LENGTH) {
       return {
         valid: false,
-        message: 'Password must be at least 8 characters',
+        message: `Password must be at least ${VALIDATION_RULES.PASSWORD_MIN_LENGTH} characters`,
       };
     }
-    if (password.length > 128) {
-      return {
-        valid: false,
-        message: 'Password cannot exceed 128 characters',
-      };
-    }
-
-    // Enhanced password strength validation
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumbers = /\d/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    const criteriaMet = [
-      hasUpperCase,
-      hasLowerCase,
-      hasNumbers,
-      hasSpecialChar,
-    ].filter(Boolean).length;
-
-    if (criteriaMet < 3) {
-      return {
-        valid: false,
-        message:
-          'Password must contain at least 3 of: uppercase, lowercase, numbers, special characters',
-      };
-    }
-
     return { valid: true, message: '' };
   }
-
-  onUsernameChange(username: string) {
-    const validation = this.validateUsername(username);
-    this.validation.update(state => ({
-      ...state,
-      username: {
-        touched: true,
-        valid: validation.valid,
-        message: validation.message,
-      },
-    }));
+  // Input change handlers with autofill prevention
+  onUsernameChange(value: string): void {
+    this.credentials.update(cred => ({ ...cred, username: value }));
+    if (value !== '') {
+      this.clearAutofillStyles('username');
+    }
   }
 
-  onPasswordChange(password: string) {
-    const validation = this.validatePassword(password);
-    this.validation.update(state => ({
-      ...state,
-      password: {
-        touched: true,
-        valid: validation.valid,
-        message: validation.message,
-      },
-    }));
+  onPasswordChange(value: string): void {
+    this.credentials.update(cred => ({ ...cred, password: value }));
+    if (value !== '') {
+      this.clearAutofillStyles('password');
+    }
   }
-  onLogin() {
-    // Check for account lockout first
+  onLogin(): void {
+    this.formSubmitted.set(true);
+
+    // Check if account is locked
     if (this.isAccountLocked()) {
       const remainingMinutes = Math.ceil(this.remainingLockoutTime() / 60000);
       this._messageService.add({
-        severity: 'warn',
+        severity: 'error',
         summary: 'Account Locked',
-        detail: `Account is temporarily locked. Please try again in ${remainingMinutes} minutes.`,
-        life: 5000,
+        detail: `Too many failed attempts. Please try again in ${remainingMinutes} minutes.`,
+        life: TOAST_LIFETIMES.ERROR,
       });
       return;
     }
-
-    this.formSubmitted.set(true);
 
     // Mark all fields as touched
     this.markFieldAsTouched('username');
     this.markFieldAsTouched('password');
 
+    // Validate credentials
     const usernameValidation = this.validateUsername(
       this.credentials().username
     );
@@ -352,138 +309,69 @@ export class LoginComponent implements OnDestroy, AfterViewInit {
       const errors = [];
       if (!usernameValidation.valid) errors.push(usernameValidation.message);
       if (!passwordValidation.valid) errors.push(passwordValidation.message);
-
       this._messageService.add({
         severity: 'error',
         summary: 'Validation Error',
-        detail: `Please fix the following issues: ${errors.join(', ')}`,
-        life: 4000,
+        detail: `Please fix the following issues:\n• ${errors.join('\n• ')}`,
+        life: TOAST_LIFETIMES.ERROR,
       });
       return;
     }
 
-    // If validation passes, proceed with login
+    // Proceed with login
+    this.performLogin();
+  }
+
+  private performLogin(): void {
     this.isLoading.set(true);
 
-    // Simulate API call with proper error handling
+    // Simulate API call
     setTimeout(() => {
       this.isLoading.set(false);
 
       // Simple credential check (replace with actual authentication)
       if (
         this.credentials().username === 'admin' &&
-        this.credentials().password === 'password123A!'
+        this.credentials().password === 'password'
       ) {
-        // Reset login attempts on successful login
-        this.loginAttempts.set({ timestamp: Date.now(), count: 0 });
-
+        this.resetFailedAttempts();
         this._messageService.add({
           severity: 'success',
           summary: 'Login Successful',
           detail: `Welcome back, ${this.credentials().username}!`,
-          life: 3000,
+          life: TOAST_LIFETIMES.SUCCESS,
         });
-
-        // Clear all form data and sensitive information
-        this.clearFormData();
-
         // Navigate to home/dashboard
         this._router.navigate(['/home']);
       } else {
-        // Increment failed login attempts
-        const currentAttempts = this.loginAttempts();
-        const now = Date.now();
-
-        // Reset counter if outside attempt window
-        if (
-          now - currentAttempts.timestamp >
-          this.securityConfig.attemptWindow
-        ) {
-          this.loginAttempts.set({ timestamp: now, count: 1 });
-        } else {
-          this.loginAttempts.update(attempts => ({
-            ...attempts,
-            count: attempts.count + 1,
-            timestamp: now,
-          }));
-        }
-
-        const remainingAttempts =
-          this.securityConfig.maxAttempts - this.loginAttempts().count;
-
-        if (remainingAttempts <= 0) {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'Account Locked',
-            detail: 'Too many failed attempts. Account locked for 15 minutes.',
-            life: 5000,
-          });
-        } else {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'Login Failed',
-            detail: `Invalid credentials. ${remainingAttempts} attempts remaining.`,
-            life: 4000,
-          });
-        }
+        this.recordFailedAttempt();
+        this._messageService.add({
+          severity: 'error',
+          summary: 'Login Failed',
+          detail: 'Invalid username or password. Please try again.',
+          life: TOAST_LIFETIMES.ERROR,
+        });
       }
-    }, 1500);
-  }
-  onForgotPassword() {
+    }, UI_CONSTANTS.LOADING_SIMULATION);
+  } // User action handlers
+  onForgotPassword(): void {
     this._messageService.add({
       severity: 'info',
       summary: 'Password Reset',
       detail: 'Password reset functionality will be available soon.',
-      life: 3000,
+      life: TOAST_LIFETIMES.INFO,
     });
   }
 
-  onContactSupport() {
+  onContactSupport(): void {
     this._messageService.add({
       severity: 'info',
       summary: 'Support Contact',
       detail: 'Support contact functionality will be available soon.',
-      life: 3000,
+      life: TOAST_LIFETIMES.INFO,
     });
   }
-
-  togglePasswordVisibility() {
-    this.showPassword.set(!this.showPassword());
-  }
-
-  // Password strength calculation
-  getPasswordStrength(): 'weak' | 'medium' | 'strong' {
-    const password = this.credentials().password;
-    if (!password) return 'weak';
-
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumbers = /\d/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    const criteriaMet = [
-      hasUpperCase,
-      hasLowerCase,
-      hasNumbers,
-      hasSpecialChar,
-    ].filter(Boolean).length;
-
-    if (password.length >= 12 && criteriaMet >= 4) return 'strong';
-    if (password.length >= 8 && criteriaMet >= 3) return 'medium';
-    return 'weak';
-  }
-
-  getPasswordStrengthText(): string {
-    const strength = this.getPasswordStrength();
-    switch (strength) {
-      case 'strong':
-        return 'Strong password';
-      case 'medium':
-        return 'Good password';
-      case 'weak':
-        return 'Weak password - use uppercase, lowercase, numbers, and symbols';
-      default:
-        return '';
-    }
+  togglePasswordVisibility(): void {
+    this.formState.showPassword.set(!this.formState.showPassword());
   }
 }

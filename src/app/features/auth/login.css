@@ -1,4 +1,6 @@
-/* Custom scrollbar for webkit browsers - cannot be replaced with Tailwind */
+/* === LOGIN PAGE ESSENTIAL STYLES === */
+
+/* Custom scrollbar for webkit browsers - Browser-specific, cannot be replaced by Tailwind */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -6,13 +8,85 @@
 
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #94a3b8;
   border-radius: 3px;
+  transition: background-color 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
+}
+
+/* Anti-autofill styles - Browser-specific, cannot be replaced by Tailwind */
+.login-form input:-webkit-autofill,
+.login-form input:-webkit-autofill:hover,
+.login-form input:-webkit-autofill:focus,
+.login-form input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #f9fafb inset !important;
+  -webkit-text-fill-color: #111827 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Sports silhouettes animations - Custom keyframes with complex transforms, cannot be replaced */
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-5px) rotate(var(--rotation, 0deg));
+  }
+}
+
+/* Selector with CSS variable rotation - Cannot be replaced by Tailwind */
+[style*='transform: rotate'] {
+  animation: float-gentle 8s ease-in-out infinite;
+}
+
+/* Focus override to prevent double borders - Necessary for clean UX */
+.login-form input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.login-form input:focus-visible {
+  outline: none !important;
+}
+
+/* Enhanced focus states for better accessibility and visual hierarchy */
+.login-form input:focus,
+.login-form button:focus {
+  box-shadow:
+    0 0 0 2px rgba(147, 51, 234, 0.1),
+    0 0 0 4px rgba(147, 51, 234, 0.2) !important;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* High contrast mode enhancements */
+@media (prefers-contrast: high) {
+  .login-form input:focus {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .login-form button:focus {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .login-form * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  [style*='transform: rotate'] {
+    animation: none !important;
+  }
 }
