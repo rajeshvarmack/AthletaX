@@ -1,187 +1,265 @@
-<div class="app-bg flex min-h-screen flex-col">
-  <!-- Header with Sign Out -->
-  <header class="relative flex flex-col items-center pt-10 pb-6">
-    <!-- Sign Out Button -->
-    <button
-      (click)="onSignOut()"
-      class="absolute top-6 right-8 flex cursor-pointer items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20"
-    >
-      <i class="pi pi-sign-out"></i>
-      <span>Sign Out</span>
-    </button>
+<!-- Modern Production-Ready Home Page -->
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <!-- Skip Links for Accessibility -->
+  <a
+    href="#main-content"
+    class="sr-only absolute z-50 rounded bg-purple-600 px-4 py-2 text-white shadow-lg focus:not-sr-only focus:top-4 focus:left-4"
+  >
+    Skip to main content
+  </a>
 
-    <div class="mb-4">
-      <!-- Replace with your SVG logo -->
-      <svg
-        width="64"
-        height="64"
-        viewBox="0 0 64 64"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          cx="32"
-          cy="32"
-          r="30"
-          fill="url(#grad1)"
-          stroke="#fff"
-          stroke-width="2"
-        />
-        <defs>
-          <radialGradient id="grad1" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#a4508b" />
-            <stop offset="100%" stop-color="#3a1c71" />
-          </radialGradient>
-        </defs>
-        <!-- Trophy base -->
-        <rect
-          x="26"
-          y="40"
-          width="12"
-          height="6"
-          rx="2"
-          fill="#fff"
-          fill-opacity="0.8"
-        />
-        <!-- Trophy cup -->
-        <ellipse
-          cx="32"
-          cy="32"
-          rx="10"
-          ry="12"
-          fill="#fff"
-          fill-opacity="0.9"
-        />
-        <!-- Handles -->
-        <path
-          d="M22 32 Q14 28 22 24"
-          stroke="#fff"
-          stroke-width="2"
-          fill="none"
-        />
-        <path
-          d="M42 32 Q50 28 42 24"
-          stroke="#fff"
-          stroke-width="2"
-          fill="none"
-        />
-        <!-- Star -->
-        <polygon
-          points="32,26 33.8,30.2 38.4,30.6 34.8,33.4 36,38 32,35.2 28,38 29.2,33.4 25.6,30.6 30.2,30.2"
-          fill="#a4508b"
-        />
-      </svg>
+  <!-- Toast Notifications -->
+  <p-toast position="top-right"></p-toast>
+
+  <!-- Header Section -->
+  <header class="relative border-b border-gray-100 bg-white shadow-sm">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-20 items-center justify-between">
+        <!-- Logo and Brand -->
+        <div class="flex items-center space-x-4">
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-indigo-700 shadow-lg"
+          >
+            <svg
+              class="h-7 w-7 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">NXAcademy</h1>
+            <p class="text-sm font-medium text-gray-500">
+              Sports Management Portal
+            </p>
+          </div>
+        </div>
+
+        <!-- User Actions -->
+        <div class="flex items-center space-x-4">
+          <span class="hidden text-sm text-gray-600 sm:block">
+            {{ welcomeMessage() }}
+          </span>
+          <button
+            (click)="onSignOut()"
+            class="inline-flex items-center space-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:outline-none"
+            aria-label="Sign out of your account"
+          >
+            <i class="pi pi-sign-out text-gray-500"></i>
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </div>
     </div>
-    <h1 class="mb-2 text-4xl font-extrabold text-white drop-shadow md:text-5xl">
-      AthletaNX
-    </h1>
-    <p class="text-lg font-medium text-blue-100 md:text-xl">
-      Welcome to AthletaNX Management Portal
-    </p>
   </header>
-
-  <!-- Main Cards Section -->
-  <main class="flex flex-1 flex-col items-center justify-center px-2">
-    <div
-      class="mb-10 grid w-full max-w-5xl grid-cols-1 items-stretch gap-8 md:grid-cols-2"
-    >
-      <!-- Branches Card -->
-      <div
-        (click)="onBranchesClick()"
-        (keyup.enter)="onBranchesClick()"
-        (keyup.space)="onBranchesClick()"
-        tabindex="0"
-        role="button"
-        aria-label="Navigate to branches management"
-        class="relative flex h-64 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 p-6 text-white shadow transition-all duration-1000 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] will-change-transform hover:scale-105 hover:shadow-2xl"
+  <!-- Main Content -->
+  <main
+    id="main-content"
+    class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+    role="main"
+  >
+    <!-- Welcome Section -->
+    <section class="mb-12">
+      <div class="text-center">
+        <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">
+          {{ welcomeMessage() }}
+        </h2>
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
+          Manage your sports academy with comprehensive tools for athletes,
+          teams, and facilities.
+        </p>
+      </div>
+    </section>
+    <!-- Quick Actions -->
+    <section class="mb-12" aria-labelledby="quick-actions-heading">
+      <h3
+        id="quick-actions-heading"
+        class="mb-6 text-lg font-semibold text-gray-900"
       >
-        <span
-          class="mb-2 inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-white/20 backdrop-blur-sm"
+        Quick Actions
+      </h3>
+      <div
+        class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2"
+        role="list"
+      >
+        <div
+          *ngFor="let action of quickActions(); trackBy: trackByActionId"
+          (click)="onQuickAction(action)"
+          (keydown)="onKeyboardNavigation($event, action)"
+          class="feature-card-hover group hardware-accelerated relative cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 hover:border-gray-300"
+          [class.bg-gradient-to-br]="action.color === 'primary'"
+          [class.from-purple-50]="action.color === 'primary'"
+          [class.to-indigo-50]="action.color === 'primary'"
+          [class.bg-gradient-to-br]="action.color === 'secondary'"
+          [class.from-blue-50]="action.color === 'secondary'"
+          [class.to-teal-50]="action.color === 'secondary'"
+          tabindex="0"
+          role="listitem button"
+          [attr.aria-label]="action.ariaLabel"
         >
-          <i class="pi pi-building text-3xl text-white"></i>
-        </span>
-        <span class="mb-1 text-2xl font-bold text-white">Branches</span>
-        <span class="mb-2 text-sm text-blue-100"
-          >Select and manage academy branches</span
+          <!-- Icon -->
+          <div class="mb-6 flex items-center justify-between">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-xl shadow-sm transition-all duration-300 group-hover:scale-110"
+              [class.bg-purple-100]="action.color === 'primary'"
+              [class.text-purple-600]="action.color === 'primary'"
+              [class.bg-blue-100]="action.color === 'secondary'"
+              [class.text-blue-600]="action.color === 'secondary'"
+            >
+              <i class="pi text-2xl" [class]="action.icon"></i>
+            </div>
+            <span
+              class="rounded-full px-3 py-1 text-sm font-medium"
+              [class.bg-purple-100]="action.color === 'primary'"
+              [class.text-purple-700]="action.color === 'primary'"
+              [class.bg-blue-100]="action.color === 'secondary'"
+              [class.text-blue-700]="action.color === 'secondary'"
+            >
+              {{ action.metrics }}
+            </span>
+          </div>
+
+          <!-- Content -->
+          <div>
+            <h4
+              class="mb-2 text-xl font-semibold text-gray-900 transition-colors group-hover:text-gray-700"
+            >
+              {{ action.title }}
+            </h4>
+            <p class="mb-4 text-sm leading-relaxed text-gray-600">
+              {{ action.description }}
+            </p>
+
+            <!-- Action indicator -->
+            <div
+              class="flex items-center text-sm font-medium transition-colors"
+              [class.text-purple-600]="action.color === 'primary'"
+              [class.text-blue-600]="action.color === 'secondary'"
+            >
+              <span>Open {{ action.title }}</span>
+              <i
+                class="pi pi-arrow-right ml-2 text-xs transition-transform group-hover:translate-x-1"
+              ></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metrics Overview -->
+    <section class="mb-12">
+      <div class="mb-6 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-gray-900">Academy Overview</h3>
+        <div
+          *ngIf="isLoading()"
+          class="flex items-center space-x-2 text-sm text-gray-500"
         >
-        <span class="mb-2 text-xl font-extrabold text-white">
-          16 Active Branches
-        </span>
+          <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <span>Loading data...</span>
+        </div>
       </div>
 
-      <!-- Management Card -->
-      <div
-        (click)="onManagementClick()"
-        (keyup.enter)="onManagementClick()"
-        (keyup.space)="onManagementClick()"
-        tabindex="0"
-        role="button"
-        aria-label="Navigate to management dashboard"
-        class="relative flex h-64 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-purple-700 to-indigo-500 p-6 text-white shadow transition-all duration-1000 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] will-change-transform hover:scale-105 hover:shadow-2xl"
-      >
-        <span
-          class="mb-2 inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-white/20 backdrop-blur-sm"
-        >
-          <i class="pi pi-chart-line text-3xl text-white"></i>
-        </span>
-        <span class="mb-1 text-2xl font-bold text-white">Management</span>
-        <span class="mb-2 text-sm text-purple-100"
-          >Oversee academy operations, analytics, and staff</span
-        >
-        <span class="mb-2 text-xl font-extrabold text-white"
-          >Centralized Control</span
-        >
-      </div>
-    </div>
-
-    <!-- Academy Overview Section -->
-    <section
-      class="mb-8 flex w-full max-w-6xl flex-col items-center rounded-2xl bg-transparent p-6 shadow-lg"
-    >
-      <h2 class="mb-6 text-center text-2xl font-bold text-white">
-        Academy Overview
-      </h2>
-      <div
-        class="grid w-full grid-cols-1 gap-6 text-center sm:grid-cols-2 md:grid-cols-4"
-      >
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <!-- Total Players -->
-        <div
-          class="flex h-40 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-green-400 to-green-600 p-6 shadow transition-shadow transition-transform duration-1000 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] will-change-transform hover:scale-105 hover:shadow-2xl"
-        >
-          <i class="pi pi-users mb-2 text-3xl text-white"></i>
-          <span class="text-3xl font-extrabold text-white">-</span>
-          <span class="mt-2 text-white">Total Players</span>
+        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div class="flex items-center">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100"
+            >
+              <i class="pi pi-users text-xl text-green-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Total Players</p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ isLoading() ? '---' : metrics().totalPlayers.toLocaleString()
+                }}
+              </p>
+            </div>
+          </div>
         </div>
-        <!-- Teams -->
-        <div
-          class="flex h-40 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 p-6 shadow transition-shadow transition-transform duration-1000 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] will-change-transform hover:scale-105 hover:shadow-2xl"
-        >
-          <i class="pi pi-sitemap mb-2 text-3xl text-white"></i>
-          <span class="text-3xl font-extrabold text-white">-</span>
-          <span class="mt-2 text-white">Teams</span>
+
+        <!-- Active Teams -->
+        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div class="flex items-center">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100"
+            >
+              <i class="pi pi-sitemap text-xl text-orange-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Active Teams</p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ isLoading() ? '--' : metrics().activeTeams }}
+              </p>
+            </div>
+          </div>
         </div>
+
         <!-- Active Branches -->
-        <div
-          class="flex h-40 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 p-6 shadow transition-shadow transition-transform duration-1000 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] will-change-transform hover:scale-105 hover:shadow-2xl"
-        >
-          <i class="pi pi-building mb-2 text-3xl text-white"></i>
-          <span class="text-3xl font-extrabold text-white">16</span>
-          <span class="mt-2 text-white">Active Branches</span>
+        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div class="flex items-center">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100"
+            >
+              <i class="pi pi-building text-xl text-blue-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Active Branches</p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ metrics().activeBranches }}
+              </p>
+            </div>
+          </div>
         </div>
+
         <!-- Sports Offered -->
-        <div
-          class="flex h-40 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 p-6 shadow transition-shadow transition-transform duration-1000 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] will-change-transform hover:scale-105 hover:shadow-2xl"
-        >
-          <i class="pi pi-star mb-2 text-3xl text-white"></i>
-          <span class="text-3xl font-extrabold text-white">-</span>
-          <span class="mt-2 text-white">Sports Offered</span>
+        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div class="flex items-center">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100"
+            >
+              <i class="pi pi-star text-xl text-purple-600"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Sports Offered</p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ isLoading() ? '--' : metrics().sportsOffered }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
   <!-- Footer -->
-  <footer class="w-full py-4 text-center text-sm text-blue-100 opacity-80">
-    © 2025 AthletaNX. Excellence in Sports Education.
+  <footer class="border-t border-gray-200 bg-white">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <div class="text-center text-sm text-gray-500">
+        © {{ currentTime() | date:'yyyy' }} NXAcademy. Excellence in Sports
+        Education.
+      </div>
+    </div>
   </footer>
 </div>
