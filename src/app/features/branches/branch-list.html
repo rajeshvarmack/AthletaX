@@ -15,7 +15,7 @@
       <!-- Back Button -->
       <button
         (click)="onBack()"
-        class="flex items-center gap-2 rounded-lg border border-blue-300 bg-blue-500 px-4 py-2 text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-blue-600 hover:shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+        class="flex items-center gap-2 rounded-lg border border-gray-200 bg-white/90 px-4 py-2 text-gray-700 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-white hover:shadow-md focus:ring-2 focus:ring-gray-400 focus:outline-none"
         aria-label="Go back to home page"
         type="button"
       >
@@ -28,7 +28,7 @@
         <!-- View Toggle Button -->
         <button
           (click)="toggleViewMode()"
-          class="flex items-center gap-2 rounded-lg border border-emerald-300 bg-emerald-500 px-4 py-2 text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-emerald-600 hover:shadow-md focus:ring-2 focus:ring-emerald-400 focus:outline-none"
+          class="flex items-center gap-2 rounded-lg border border-gray-200 bg-white/90 px-4 py-2 text-gray-700 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-white hover:shadow-md focus:ring-2 focus:ring-gray-400 focus:outline-none"
           [attr.aria-label]="isFullWidth() ? 'Switch to compact view' : 'Switch to full width view'"
           type="button"
         >
@@ -42,10 +42,11 @@
             {{ isFullWidth() ? 'Compact' : 'Full Width' }}
           </span>
         </button>
+
         <!-- Sign Out Button -->
         <button
           (click)="onSignOut()"
-          class="flex items-center gap-2 rounded-lg border border-red-300 bg-red-500 px-4 py-2 text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-red-600 hover:shadow-md focus:ring-2 focus:ring-red-400 focus:outline-none"
+          class="flex items-center gap-2 rounded-lg border border-gray-200 bg-white/90 px-4 py-2 text-gray-700 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-white hover:shadow-md focus:ring-2 focus:ring-gray-400 focus:outline-none"
           aria-label="Sign out of the application"
           type="button"
         >
@@ -56,7 +57,7 @@
     </div>
 
     <!-- Logo and Title -->
-    <div class="mb-4" aria-label="NXAcademy logo">
+    <div class="mb-4" aria-label="AthletaNX logo">
       <svg
         width="48"
         height="48"
@@ -66,7 +67,7 @@
         role="img"
         aria-labelledby="logo-title"
       >
-        <title id="logo-title">NXAcademy Logo</title>
+        <title id="logo-title">AthletaNX Academy Logo</title>
         <circle
           cx="32"
           cy="32"
@@ -116,12 +117,11 @@
         />
       </svg>
     </div>
-    <h1
-      class="mb-2 text-4xl font-bold text-gray-900 drop-shadow-sm md:text-5xl lg:text-6xl"
-    >
-      NXAcademy
+
+    <h1 class="mb-2 text-3xl font-extrabold text-white drop-shadow md:text-4xl">
+      AthletaNX
     </h1>
-    <p class="text-lg font-medium text-gray-600">Choose Your Branch</p>
+    <p class="text-lg font-medium text-blue-100">Choose Your Branch</p>
   </header>
   <!-- Branch Cards Grid -->
   <main
@@ -137,9 +137,9 @@
       role="status"
       aria-live="polite"
     >
-      <div class="text-center text-gray-700">
+      <div class="text-center text-white">
         <i
-          class="pi pi-spinner mb-4 animate-spin text-4xl text-gray-600"
+          class="pi pi-spinner mb-4 animate-spin text-4xl"
           aria-hidden="true"
         ></i>
         <p class="text-lg font-medium">Loading branches...</p>
@@ -154,18 +154,18 @@
       role="alert"
       aria-live="assertive"
     >
-      <div class="max-w-md text-center text-gray-700">
+      <div class="max-w-md text-center text-white">
         <i
-          class="pi pi-exclamation-triangle mb-4 text-4xl text-red-500"
+          class="pi pi-exclamation-triangle mb-4 text-4xl text-red-400"
           aria-hidden="true"
         ></i>
         <h2 class="mb-2 text-xl font-semibold">Unable to Load Branches</h2>
-        <p class="mb-4 text-gray-600">
+        <p class="mb-4 text-blue-100">
           There was an error loading the branch information. Please try again.
         </p>
         <button
           (click)="loadBranches()"
-          class="rounded-lg bg-blue-500 px-6 py-2 text-white transition-colors duration-200 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          class="rounded-lg bg-white/20 px-6 py-2 transition-colors duration-200 hover:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none"
           type="button"
         >
           Retry
@@ -173,14 +173,15 @@
       </div>
     </div>
     }
+
     <!-- Branch Grid -->
     @else {
     <div
-      class="mx-auto transition-all duration-500 ease-out"
+      class="mx-auto transition-all duration-700 ease-in-out"
       [class.max-w-7xl]="!isFullWidth()"
     >
       <div
-        class="grid gap-6 transition-all duration-500 ease-out"
+        class="grid gap-6 transition-all duration-700 ease-in-out"
         [class]="isFullWidth() ? 
             'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6' : 
             'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'"
@@ -190,9 +191,9 @@
           (click)="onBranchClick(branch)"
           (keydown.enter)="onBranchClick(branch)"
           (keydown.space)="$event.preventDefault(); onBranchClick(branch)"
-          class="branch-card group cursor-pointer overflow-hidden rounded-lg transition-all duration-400 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none"
+          class="branch-card group cursor-pointer overflow-hidden rounded-lg transition-all duration-300 ease-in-out hover:-translate-y-1 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none"
           [class]="getCategoryCardClass(branch.category)"
-          [style.animation-delay]="(i * 30) + 'ms'"
+          [style.animation-delay]="(i * 50) + 'ms'"
           tabindex="0"
           role="button"
           [attr.aria-label]="'Select ' + branch.name + ' branch in ' + branch.location + ', ' + branch.category + ' category, ' + branch.activePlayers + ' active players, ' + branch.teams + ' teams'"

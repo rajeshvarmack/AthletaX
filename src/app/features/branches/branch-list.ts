@@ -51,12 +51,11 @@ export class BranchList implements OnInit {
   ngOnInit(): void {
     this.loadBranches();
   }
+
   loadBranches(): void {
     this.isLoading.set(true);
-    this.hasError.set(false);
 
-    // TODO: Replace with actual service call in production
-    // Example: this.branchService.getBranches()
+    // Simulate API call - replace with actual service
     of(this.getBranchesData())
       .pipe(
         finalize(() => this.isLoading.set(false)),
@@ -300,29 +299,29 @@ export class BranchList implements OnInit {
     );
   }
   getCategoryStyles(category: string): string {
-    // Vibrant, distinct category badges for clear visual differentiation
+    // Minimal, professional badges with subtle category distinction through typography
     const stylesMap = {
-      Plus: 'bg-blue-500 text-white shadow-lg border border-blue-600 font-medium tracking-wide hover:bg-blue-600',
+      Plus: 'bg-gray-100 text-gray-700 shadow-sm border border-gray-200 font-medium tracking-wide',
       Advance:
-        'bg-purple-500 text-white shadow-lg border border-purple-600 font-semibold tracking-wide hover:bg-purple-600',
-      Pro: 'bg-emerald-500 text-white shadow-lg border border-emerald-600 font-bold tracking-wider hover:bg-emerald-600',
+        'bg-gray-50 text-gray-700 shadow-sm border border-gray-300 font-semibold tracking-wide',
+      Pro: 'bg-gray-900 text-white shadow-sm border border-gray-800 font-bold tracking-wider',
       School:
-        'bg-orange-500 text-white shadow-lg border border-orange-600 font-medium tracking-normal hover:bg-orange-600',
+        'bg-white text-gray-600 shadow-sm border border-gray-200 font-medium tracking-normal',
       Girls:
-        'bg-pink-500 text-white shadow-lg border border-pink-600 font-medium tracking-wide hover:bg-pink-600',
+        'bg-gray-100 text-gray-700 shadow-sm border border-gray-200 font-medium tracking-wide',
     };
     return (
       stylesMap[category as keyof typeof stylesMap] ||
-      'bg-gray-500 text-white shadow-lg border border-gray-600'
+      'bg-gray-100 text-gray-700 shadow-sm border border-gray-200'
     );
   }
   getCategoryCardClass(category: string): string {
-    // Consistent card design for all categories - uniform look and feel
+    // Clean, minimal card design with very subtle category distinction
     const cardStylesMap = {
       Plus: 'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
       Advance:
         'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
-      Pro: 'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
+      Pro: 'bg-white border-2 border-gray-300 shadow-sm hover:shadow-md hover:border-gray-400',
       School:
         'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
       Girls:
@@ -334,16 +333,16 @@ export class BranchList implements OnInit {
     );
   }
   getCategoryHeaderClass(category: string): string {
-    // Consistent white background for all headers - professional and clean
+    // Minimal gray header backgrounds - professional and clean
     const headerStylesMap = {
-      Plus: 'bg-white',
-      Advance: 'bg-white',
-      Pro: 'bg-white',
-      School: 'bg-white',
-      Girls: 'bg-white',
+      Plus: 'bg-gray-50',
+      Advance: 'bg-gray-100',
+      Pro: 'bg-gray-200',
+      School: 'bg-gray-50',
+      Girls: 'bg-gray-50',
     };
     return (
-      headerStylesMap[category as keyof typeof headerStylesMap] || 'bg-white'
+      headerStylesMap[category as keyof typeof headerStylesMap] || 'bg-gray-50'
     );
   }
   getCategoryOverlayClass(_category: string): string {
@@ -351,11 +350,11 @@ export class BranchList implements OnInit {
     return '';
   }
   getCategoryContentClass(category: string): string {
-    // Consistent white content areas with uniform borders
+    // Clean white content areas with minimal borders
     const contentStylesMap = {
       Plus: 'bg-white border-t border-gray-100',
       Advance: 'bg-white border-t border-gray-100',
-      Pro: 'bg-white border-t border-gray-100',
+      Pro: 'bg-white border-t border-gray-200',
       School: 'bg-white border-t border-gray-100',
       Girls: 'bg-white border-t border-gray-100',
     };
