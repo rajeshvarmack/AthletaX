@@ -3,6 +3,12 @@
 @import 'primeicons/primeicons.css';
 @import '@ng-select/ng-select/themes/default.theme.css';
 
+/* === APPLICATION BACKGROUND === */
+.app-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
 /* === PRIMENG TOAST ENHANCEMENTS === */
 /* Modern glass-morphism toast design - PrimeNG specific overrides */
 .p-toast {

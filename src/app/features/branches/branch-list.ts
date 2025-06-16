@@ -274,13 +274,13 @@ export class BranchList implements OnInit {
     );
   }
   getCategoryColor(category: string): string {
-    // Minimal professional approach - all icons in neutral colors
+    // Professional vibrant colors for better category distinction
     const colorMap = {
-      Pro: 'text-gray-700', // Professional dark gray
-      Advance: 'text-gray-600', // Standard gray
-      Plus: 'text-gray-600', // Standard gray
-      School: 'text-gray-600', // Standard gray
-      Girls: 'text-gray-600', // Standard gray
+      Pro: 'text-indigo-700', // Professional indigo
+      Advance: 'text-purple-700', // Advanced purple
+      Plus: 'text-blue-700', // Plus blue
+      School: 'text-violet-700', // School violet
+      Girls: 'text-pink-700', // Girls pink
     };
     return colorMap[category as keyof typeof colorMap] || 'text-gray-600';
   }
@@ -299,68 +299,36 @@ export class BranchList implements OnInit {
     );
   }
   getCategoryStyles(category: string): string {
-    // Minimal, professional badges with subtle category distinction through typography
+    // Vibrant category badges for better visual distinction
     const stylesMap = {
-      Plus: 'bg-gray-100 text-gray-700 shadow-sm border border-gray-200 font-medium tracking-wide',
+      Plus: 'bg-blue-500 text-white shadow-md border border-blue-600 font-medium tracking-wide hover:bg-blue-600',
       Advance:
-        'bg-gray-50 text-gray-700 shadow-sm border border-gray-300 font-semibold tracking-wide',
-      Pro: 'bg-gray-900 text-white shadow-sm border border-gray-800 font-bold tracking-wider',
+        'bg-purple-500 text-white shadow-md border border-purple-600 font-semibold tracking-wide hover:bg-purple-600',
+      Pro: 'bg-indigo-600 text-white shadow-md border border-indigo-700 font-bold tracking-wider hover:bg-indigo-700',
       School:
-        'bg-white text-gray-600 shadow-sm border border-gray-200 font-medium tracking-normal',
+        'bg-violet-500 text-white shadow-md border border-violet-600 font-medium tracking-normal hover:bg-violet-600',
       Girls:
-        'bg-gray-100 text-gray-700 shadow-sm border border-gray-200 font-medium tracking-wide',
+        'bg-pink-500 text-white shadow-md border border-pink-600 font-medium tracking-wide hover:bg-pink-600',
     };
     return (
       stylesMap[category as keyof typeof stylesMap] ||
-      'bg-gray-100 text-gray-700 shadow-sm border border-gray-200'
+      'bg-gray-500 text-white shadow-md border border-gray-600'
     );
   }
-  getCategoryCardClass(category: string): string {
-    // Clean, minimal card design with very subtle category distinction
-    const cardStylesMap = {
-      Plus: 'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
-      Advance:
-        'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
-      Pro: 'bg-white border-2 border-gray-300 shadow-sm hover:shadow-md hover:border-gray-400',
-      School:
-        'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
-      Girls:
-        'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300',
-    };
-    return (
-      cardStylesMap[category as keyof typeof cardStylesMap] ||
-      'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300'
-    );
+  getCategoryCardClass(_category: string): string {
+    // Clean white cards matching home page design - professional and consistent
+    return 'bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-300';
   }
-  getCategoryHeaderClass(category: string): string {
-    // Minimal gray header backgrounds - professional and clean
-    const headerStylesMap = {
-      Plus: 'bg-gray-50',
-      Advance: 'bg-gray-100',
-      Pro: 'bg-gray-200',
-      School: 'bg-gray-50',
-      Girls: 'bg-gray-50',
-    };
-    return (
-      headerStylesMap[category as keyof typeof headerStylesMap] || 'bg-gray-50'
-    );
+  getCategoryHeaderClass(_category: string): string {
+    // Clean light header matching the new white card design
+    return 'bg-gray-50';
   }
   getCategoryOverlayClass(_category: string): string {
     // Remove overlays completely for cleaner look
     return '';
   }
-  getCategoryContentClass(category: string): string {
-    // Clean white content areas with minimal borders
-    const contentStylesMap = {
-      Plus: 'bg-white border-t border-gray-100',
-      Advance: 'bg-white border-t border-gray-100',
-      Pro: 'bg-white border-t border-gray-200',
-      School: 'bg-white border-t border-gray-100',
-      Girls: 'bg-white border-t border-gray-100',
-    };
-    return (
-      contentStylesMap[category as keyof typeof contentStylesMap] ||
-      'bg-white border-t border-gray-100'
-    );
+  getCategoryContentClass(_category: string): string {
+    // Clean white content areas matching home page cards
+    return 'bg-white border-t border-gray-100';
   }
 }
