@@ -1,43 +1,72 @@
 <div class="app-bg min-h-screen">
+  <!-- Skip to main content for accessibility -->
+  <a
+    href="#main-content"
+    class="sr-only z-50 rounded-lg bg-white px-4 py-2 font-medium text-gray-900 shadow-lg focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  >
+    Skip to main content
+  </a>
   <!-- Header -->
-  <header class="relative flex flex-col items-center pt-8 pb-6">
-    <!-- Back Button -->
-    <button
-      (click)="onBack()"
-      class="absolute top-6 left-4 flex cursor-pointer items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 sm:left-8"
+  <header class="relative flex flex-col items-center pt-8 pb-6" role="banner">
+    <!-- Navigation Controls - Moved outside relative positioning -->
+    <div
+      class="absolute top-4 right-0 left-0 z-10 mx-auto flex w-full max-w-screen-xl items-center justify-between px-4"
     >
-      <i class="pi pi-arrow-left"></i>
-      <span class="hidden sm:inline">Back</span></button
-    ><!-- Sign Out Button -->
-    <button
-      (click)="onSignOut()"
-      class="absolute top-6 right-8 flex cursor-pointer items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 md:right-8"
-    >
-      <i class="pi pi-sign-out"></i>
-      <span class="hidden sm:inline">Sign Out</span></button
-    ><!-- View Toggle Button - Only show on md+ screens -->
-    <button
-      (click)="toggleViewMode()"
-      class="absolute top-6 right-40 hidden cursor-pointer items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-white/20 active:scale-95 md:flex"
-    >
-      <i
-        class="pi transition-transform duration-300"
-        [ngClass]="isFullWidth ? 'pi-compress' : 'pi-expand'"
-      ></i>
-      <span class="transition-all duration-300"
-        >{{ isFullWidth ? 'Compact' : 'Full Width' }}</span
+      <!-- Back Button -->
+      <button
+        (click)="onBack()"
+        class="flex items-center gap-2 rounded-lg border border-blue-300 bg-blue-500 px-4 py-2 text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-blue-600 hover:shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+        aria-label="Go back to home page"
+        type="button"
       >
-    </button>
+        <i class="pi pi-arrow-left" aria-hidden="true"></i>
+        <span class="hidden font-medium sm:inline">Back</span>
+      </button>
 
-    <!-- Logo -->
-    <div class="mb-4">
+      <!-- Navigation Button Group -->
+      <div class="flex items-center gap-3">
+        <!-- View Toggle Button -->
+        <button
+          (click)="toggleViewMode()"
+          class="flex items-center gap-2 rounded-lg border border-emerald-300 bg-emerald-500 px-4 py-2 text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-emerald-600 hover:shadow-md focus:ring-2 focus:ring-emerald-400 focus:outline-none"
+          [attr.aria-label]="isFullWidth() ? 'Switch to compact view' : 'Switch to full width view'"
+          type="button"
+        >
+          <i
+            class="pi transition-transform duration-300"
+            [class.pi-compress]="isFullWidth()"
+            [class.pi-expand]="!isFullWidth()"
+            aria-hidden="true"
+          ></i>
+          <span class="hidden font-medium sm:inline">
+            {{ isFullWidth() ? 'Compact' : 'Full Width' }}
+          </span>
+        </button>
+        <!-- Sign Out Button -->
+        <button
+          (click)="onSignOut()"
+          class="flex items-center gap-2 rounded-lg border border-red-300 bg-red-500 px-4 py-2 text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-red-600 hover:shadow-md focus:ring-2 focus:ring-red-400 focus:outline-none"
+          aria-label="Sign out of the application"
+          type="button"
+        >
+          <i class="pi pi-sign-out" aria-hidden="true"></i>
+          <span class="hidden font-medium sm:inline">Sign Out</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Logo and Title -->
+    <div class="mb-4" aria-label="NXAcademy logo">
       <svg
         width="48"
         height="48"
         viewBox="0 0 64 64"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-labelledby="logo-title"
       >
+        <title id="logo-title">NXAcademy Logo</title>
         <circle
           cx="32"
           cy="32"
@@ -87,103 +116,178 @@
         />
       </svg>
     </div>
-
-    <h1 class="mb-2 text-3xl font-extrabold text-white drop-shadow md:text-4xl">
-      AthletaNX
+    <h1
+      class="mb-2 text-4xl font-bold text-gray-900 drop-shadow-sm md:text-5xl lg:text-6xl"
+    >
+      NXAcademy
     </h1>
-    <p class="text-lg font-medium text-blue-100">Choose Your Branch</p>
+    <p class="text-lg font-medium text-gray-600">Choose Your Branch</p>
   </header>
   <!-- Branch Cards Grid -->
-  <main class="flex-1 px-4 pb-8 transition-all duration-700 ease-in-out">
+  <main
+    id="main-content"
+    class="flex-1 px-4 pb-8 transition-all duration-700 ease-in-out"
+    role="main"
+    [attr.aria-busy]="isLoading()"
+  >
+    <!-- Loading State -->
+    @if (isLoading()) {
     <div
-      [ngClass]="isFullWidth ? 'mx-auto transition-all duration-700 ease-in-out' : 'mx-auto max-w-7xl transition-all duration-700 ease-in-out'"
+      class="flex items-center justify-center py-12"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="text-center text-gray-700">
+        <i
+          class="pi pi-spinner mb-4 animate-spin text-4xl text-gray-600"
+          aria-hidden="true"
+        ></i>
+        <p class="text-lg font-medium">Loading branches...</p>
+      </div>
+    </div>
+    }
+
+    <!-- Error State -->
+    @else if (hasError()) {
+    <div
+      class="flex items-center justify-center py-12"
+      role="alert"
+      aria-live="assertive"
+    >
+      <div class="max-w-md text-center text-gray-700">
+        <i
+          class="pi pi-exclamation-triangle mb-4 text-4xl text-red-500"
+          aria-hidden="true"
+        ></i>
+        <h2 class="mb-2 text-xl font-semibold">Unable to Load Branches</h2>
+        <p class="mb-4 text-gray-600">
+          There was an error loading the branch information. Please try again.
+        </p>
+        <button
+          (click)="loadBranches()"
+          class="rounded-lg bg-blue-500 px-6 py-2 text-white transition-colors duration-200 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          type="button"
+        >
+          Retry
+        </button>
+      </div>
+    </div>
+    }
+    <!-- Branch Grid -->
+    @else {
+    <div
+      class="mx-auto transition-all duration-500 ease-out"
+      [class.max-w-7xl]="!isFullWidth()"
     >
       <div
-        class="transition-all duration-700 ease-in-out"
-        [ngClass]="isFullWidth ? 
-          'grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6' : 
-          'grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'"
+        class="grid gap-6 transition-all duration-500 ease-out"
+        [class]="isFullWidth() ? 
+            'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6' : 
+            'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'"
       >
-        <div
-          *ngFor="let branch of branches; let i = index"
+        @for (branch of sortedBranches(); track branch.id; let i = $index) {
+        <article
           (click)="onBranchClick(branch)"
-          (keyup.enter)="onBranchClick(branch)"
-          (keyup.space)="onBranchClick(branch)"
-          class="branch-card group cursor-pointer overflow-hidden rounded-xl border shadow-lg transition-all duration-500 ease-in-out hover:-translate-y-1 hover:shadow-xl"
-          [ngClass]="getCategoryCardClass(branch.category)"
-          [style.animation-delay]="(i * 50) + 'ms'"
+          (keydown.enter)="onBranchClick(branch)"
+          (keydown.space)="$event.preventDefault(); onBranchClick(branch)"
+          class="branch-card group cursor-pointer overflow-hidden rounded-lg transition-all duration-400 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none"
+          [class]="getCategoryCardClass(branch.category)"
+          [style.animation-delay]="(i * 30) + 'ms'"
           tabindex="0"
           role="button"
-          [attr.aria-label]="'Select ' + branch.name + ' branch in ' + branch.location"
+          [attr.aria-label]="'Select ' + branch.name + ' branch in ' + branch.location + ', ' + branch.category + ' category, ' + branch.activePlayers + ' active players, ' + branch.teams + ' teams'"
         >
           <!-- Branch Header with Category Icon -->
           <div
-            class="relative flex h-40 items-center justify-center overflow-hidden rounded-t-xl"
-            [ngClass]="getCategoryHeaderClass(branch.category)"
+            class="relative flex h-32 items-center justify-center overflow-hidden rounded-t-lg"
+            [class]="getCategoryHeaderClass(branch.category)"
           >
-            <div
-              class="absolute inset-0"
-              [ngClass]="getCategoryOverlayClass(branch.category)"
-            ></div>
             <!-- Category Icon -->
             <div class="relative z-10 flex items-center justify-center">
               <div
-                class="flex h-28 w-28 items-center justify-center rounded-full bg-white/95 shadow-lg backdrop-blur-sm transition-all duration-500 group-hover:scale-110 group-hover:bg-white group-hover:shadow-xl"
+                class="flex h-24 w-24 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg"
               >
                 <i
                   class="category-icon-medium transition-all duration-300"
-                  [ngClass]="'pi ' + getCategoryIcon(branch.category) + ' ' + getCategoryColor(branch.category)"
+                  [class]="'pi ' + getCategoryIcon(branch.category) + ' ' + getCategoryColor(branch.category)"
+                  [attr.aria-label]="branch.category + ' category icon'"
                 ></i>
               </div>
             </div>
-
             <!-- Category Badge -->
             <div
-              class="absolute top-3 right-3 z-20 cursor-help rounded-lg px-3 py-1.5 text-xs font-bold shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-2xl"
-              [ngClass]="getCategoryStyles(branch.category)"
-              [title]="branch.category + ' Category'"
+              class="absolute top-3 right-3 z-20 rounded-md px-2.5 py-1 text-xs transition-all duration-300"
+              [class]="getCategoryStyles(branch.category)"
+              [attr.aria-label]="branch.category + ' category badge'"
             >
               <i
-                class="pi mr-1.5"
-                [ngClass]="getCategoryIcon(branch.category)"
+                class="pi mr-1"
+                [class]="getCategoryIcon(branch.category)"
+                aria-hidden="true"
               ></i>
               {{ branch.category }}
             </div>
           </div>
           <!-- Branch Info -->
           <div
-            class="branch-card-content rounded-b-xl p-6"
-            [ngClass]="getCategoryContentClass(branch.category)"
+            class="branch-card-content relative rounded-b-lg p-5"
+            [class]="getCategoryContentClass(branch.category)"
           >
             <!-- Branch Name -->
             <h3
-              class="mb-2 text-center text-xl font-bold text-gray-800 transition-colors duration-300 group-hover:text-blue-600"
+              class="mb-2 text-center text-lg font-semibold text-gray-800 transition-colors duration-300 group-hover:text-gray-900"
             >
               {{ branch.name }}
             </h3>
 
             <!-- Location -->
             <div class="mb-4 flex items-center justify-center text-gray-600">
-              <i class="pi pi-map-marker mr-2 text-blue-500"></i>
+              <i
+                class="pi pi-map-marker mr-2 text-sm text-gray-500"
+                aria-hidden="true"
+              ></i>
               <span class="text-sm font-medium">{{ branch.location }}</span>
             </div>
 
             <!-- Additional Info -->
             <div
-              class="flex items-center justify-between border-t border-gray-100 pt-3 text-xs text-gray-500"
+              class="flex items-center justify-between border-t border-gray-100 pt-3 text-xs text-gray-600"
             >
-              <span class="flex items-center">
-                <i class="pi pi-users mr-1 text-blue-500"></i>
-                {{ branch.teams }} Teams
+              <span
+                class="flex items-center"
+                [attr.aria-label]="branch.teams + ' teams'"
+              >
+                <i
+                  class="pi pi-users mr-1 text-gray-500"
+                  aria-hidden="true"
+                ></i>
+                <span class="font-medium">{{ branch.teams }} Teams</span>
               </span>
-              <span class="flex items-center">
-                <span class="font-semibold text-green-700">Active:</span>
-                <span class="ml-1 font-bold">{{ branch.activePlayers }}</span>
+              <span
+                class="flex items-center"
+                [attr.aria-label]="branch.activePlayers + ' active players'"
+              >
+                <span class="font-medium text-gray-600">Active:</span>
+                <span class="ml-1 font-semibold text-gray-800"
+                  >{{ branch.activePlayers }}</span
+                >
               </span>
             </div>
           </div>
-        </div>
+        </article>
+        }
       </div>
     </div>
+    }
   </main>
+
+  <!-- Toast Container for Notifications -->
+  <p-toast
+    position="top-right"
+    [life]="5000"
+    [showTransformOptions]="'translateX(100%)'"
+    [hideTransformOptions]="'translateX(100%)'"
+    [showTransitionOptions]="'300ms ease-out'"
+    [hideTransitionOptions]="'250ms ease-in'"
+  ></p-toast>
 </div>
