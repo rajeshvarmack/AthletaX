@@ -1,8 +1,0 @@
-<!-- Example of what app.html would look like (NOT recommended for your case) -->
-<ng-container *ngIf="shouldShowLayout(); else noLayoutContent">
-  <app-main-layout></app-main-layout>
-</ng-container>
-
-<ng-template #noLayoutContent>
-  <router-outlet></router-outlet>
-</ng-template>
