@@ -3,68 +3,33 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnInit,
   signal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 
-// Type definitions for better type safety
-interface FieldValidation {
-  readonly touched: boolean;
-  readonly valid: boolean;
-  readonly message: string;
-}
-
-interface ValidationState {
-  readonly username: FieldValidation;
-  readonly password: FieldValidation;
-}
-
-interface LoginCredentials {
-  readonly username: string;
-  readonly password: string;
-}
-
-interface LoginAttempt {
-  readonly timestamp: number;
-  readonly success: boolean;
-  readonly ip?: string;
-}
-
-// Enhanced constants with better categorization
-const VALIDATION_RULES = {
-  USERNAME_MIN_LENGTH: 3,
-  PASSWORD_MIN_LENGTH: 6,
-  MAX_FAILED_ATTEMPTS: 5,
-  LOCKOUT_DURATION: 15 * 60 * 1000, // 15 minutes
-  AUTOFILL_CLEAR_DELAY: 100,
-} as const;
-
-const UI_CONSTANTS = {
-  FOCUS_DELAY: 100,
-  ANIMATION_DURATION: 300,
-  LOADING_SIMULATION: 1500,
-} as const;
-
-const TOAST_LIFETIMES = {
-  SUCCESS: 3000,
-  ERROR: 4000,
-  INFO: 3000,
-  WARNING: 5000,
-} as const;
+// Import our organized models and validators
+import {
+  LoginAttempt,
+  TOAST_LIFETIMES,
+  UI_CONSTANTS,
+  VALIDATION_RULES,
+} from './models';
+import { LoginValidators } from './validators';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     ButtonModule,
     ToastModule,
     InputTextModule,
@@ -77,78 +42,134 @@ const TOAST_LIFETIMES = {
 export class LoginComponent implements OnInit, AfterViewInit {
   private readonly _messageService = inject(MessageService);
   private readonly _router = inject(Router);
+  private readonly _formBuilder = inject(FormBuilder);
 
-  // Track focus state for form inputs
-  usernameFocused = false;
-  passwordFocused = false;
-  // Form state with signals and better typing
-  credentials = signal<LoginCredentials>({
-    username: '',
-    password: '',
+  // Reactive Form with Signal integration
+  readonly loginForm: FormGroup = this._formBuilder.group({
+    username: ['', [LoginValidators.username]],
+    password: ['', [LoginValidators.password]],
+    rememberMe: [false],
   });
 
-  // Validation state with proper typing
-  validation = signal<ValidationState>({
-    username: {
-      touched: false,
-      valid: true,
-      message: '',
-    },
-    password: {
-      touched: false,
-      valid: true,
-      message: '',
-    },
+  // Signals for reactive state management
+  readonly isLoading = signal(false);
+  readonly showPassword = signal(false);
+  readonly formSubmitted = signal(false);
+
+  // Focus state tracking
+  readonly usernameFocused = signal(false);
+  readonly passwordFocused = signal(false);
+
+  // Touched state tracking for better reactivity
+  readonly usernameTouched = signal(false);
+  readonly passwordTouched = signal(false);
+
+  // Form value signals - reactive to form changes
+  readonly formValue = signal(this.loginForm.value);
+  readonly isFormValid = signal(this.loginForm.valid); // Computed properties for validation states
+  readonly usernameErrors = computed(() => {
+    const control = this.loginForm.get('username');
+    if (!control) return null;
+
+    // Use both signals for reactivity
+    this.formValue();
+    this.usernameTouched();
+
+    if (!control.touched || !control.errors) return null;
+    return control.errors;
   });
 
-  // Additional form state with better organization
-  readonly formState = {
-    rememberMe: signal(false),
-    isLoading: signal(false),
-    showPassword: signal(false),
-    formSubmitted: signal(false),
-  };
+  readonly passwordErrors = computed(() => {
+    const control = this.loginForm.get('password');
+    if (!control) return null;
 
-  // Legacy properties for template compatibility
-  get rememberMe() {
-    return this.formState.rememberMe();
-  }
-  set rememberMe(value: boolean) {
-    this.formState.rememberMe.set(value);
-  }
+    // Use both signals for reactivity
+    this.formValue();
+    this.passwordTouched();
 
-  get isLoading() {
-    return this.formState.isLoading;
-  }
-  get showPassword() {
-    return this.formState.showPassword();
-  }
-  get formSubmitted() {
-    return this.formState.formSubmitted;
-  }
+    if (!control.touched || !control.errors) return null;
+    return control.errors;
+  });
 
-  // Account lockout tracking with enhanced typing
+  // Computed properties for valid states - only show green when field is touched, has value, and is valid
+  readonly isUsernameValid = computed(() => {
+    const control = this.loginForm.get('username');
+    if (!control) return false;
+
+    // Use both signals for reactivity
+    this.formValue();
+    this.usernameTouched();
+
+    if (!control.touched) return false;
+    const value = control.value?.trim();
+    return !control.errors && value && value.length > 0;
+  });
+
+  readonly isPasswordValid = computed(() => {
+    const control = this.loginForm.get('password');
+    if (!control) return false;
+
+    // Use both signals for reactivity
+    this.formValue();
+    this.passwordTouched();
+
+    if (!control.touched) return false;
+    const value = control.value;
+    return !control.errors && value && value.length > 0;
+  });
+
+  // Security state management
   private readonly securityState = {
     failedAttempts: signal(0),
     lockoutUntil: signal<number | null>(null),
     attemptHistory: signal<LoginAttempt[]>([]),
   };
-  // Computed properties for account lockout
-  isAccountLocked(): boolean {
+
+  // Computed security properties
+  readonly isAccountLocked = computed(() => {
     const lockoutTime = this.securityState.lockoutUntil();
     return lockoutTime !== null && Date.now() < lockoutTime;
-  }
+  });
 
-  remainingLockoutTime(): number {
+  readonly remainingLockoutTime = computed(() => {
     const lockoutTime = this.securityState.lockoutUntil();
     if (lockoutTime === null) return 0;
     return Math.max(0, lockoutTime - Date.now());
+  });
+
+  // Legacy getters for template compatibility (if needed)
+  get credentials() {
+    return this.formValue();
   }
+
+  get rememberMe() {
+    return this.loginForm.get('rememberMe')?.value || false;
+  } 
+  
   // Lifecycle hooks
   ngOnInit(): void {
+    // Setup form value changes subscription with signals
+    this.loginForm.valueChanges.subscribe(value => {
+      this.formValue.set(value);
+    });
+
+    // Setup form validity changes subscription
+    this.loginForm.statusChanges.subscribe(() => {
+      this.isFormValid.set(this.loginForm.valid);
+    }); 
+    
     // Clear any existing form state on component initialization
-    this.credentials.set({ username: '', password: '' });
+    this.loginForm.reset({
+      username: '',
+      password: '',
+      rememberMe: false,
+    });
+
+    // Reset all state signals
     this.formSubmitted.set(false);
+    this.usernameTouched.set(false);
+    this.passwordTouched.set(false);
+    this.resetSecurityState();
   }
 
   ngAfterViewInit(): void {
@@ -164,10 +185,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
       ) as HTMLInputElement;
       if (usernameInput) {
         usernameInput.focus();
-        this.usernameFocused = true;
+        this.usernameFocused.set(true);
       }
     }, UI_CONSTANTS.FOCUS_DELAY); // Small delay to ensure the DOM is ready
   }
+
+  private resetSecurityState(): void {
+    this.securityState.failedAttempts.set(0);
+    this.securityState.lockoutUntil.set(null);
+    this.securityState.attemptHistory.set([]);
+  }
+
   private recordFailedAttempt(): void {
     const attempts = this.securityState.failedAttempts() + 1;
     this.securityState.failedAttempts.set(attempts);
@@ -206,17 +234,46 @@ export class LoginComponent implements OnInit, AfterViewInit {
         input.style.color = '';
       }
     }, VALIDATION_RULES.AUTOFILL_CLEAR_DELAY);
-  }
-  // Form field management
+  } 
+  
+  // Form field management with reactive forms
   markFieldAsTouched(fieldName: 'username' | 'password'): void {
-    this.validation.update(state => ({
-      ...state,
-      [fieldName]: {
-        ...state[fieldName],
-        touched: true,
-      },
-    }));
+    const control = this.loginForm.get(fieldName);
+    if (control) {
+      control.markAsTouched();
+      control.updateValueAndValidity();
+
+      // Update touched signals for reactivity
+      if (fieldName === 'username') {
+        this.usernameTouched.set(true);
+      } else {
+        this.passwordTouched.set(true);
+      }
+
+      // Manually trigger form value signal update to ensure computed properties recalculate
+      this.formValue.set(this.loginForm.value);
+    }
   }
+
+  // Focus management methods
+  onUsernameFocus(): void {
+    this.usernameFocused.set(true);
+  }
+
+  onUsernameBlur(): void {
+    this.usernameFocused.set(false);
+    this.markFieldAsTouched('username');
+  }
+
+  onPasswordFocus(): void {
+    this.passwordFocused.set(true);
+  }
+
+  onPasswordBlur(): void {
+    this.passwordFocused.set(false);
+    this.markFieldAsTouched('password');
+  }
+
   // Validation methods using constants
   private validateUsername(username: string): {
     valid: boolean;
@@ -249,22 +306,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
     return { valid: true, message: '' };
   }
-  // Input change handlers with autofill prevention
-  onUsernameChange(value: string): void {
-    this.credentials.update(cred => ({ ...cred, username: value }));
-    if (value !== '') {
-      this.clearAutofillStyles('username');
-    }
-  }
 
-  onPasswordChange(value: string): void {
-    this.credentials.update(cred => ({ ...cred, password: value }));
-    if (value !== '') {
-      this.clearAutofillStyles('password');
-    }
-  }
+  // Main login submission method
   onLogin(): void {
     this.formSubmitted.set(true);
+
+    // Mark all fields as touched to show validation errors
+    this.loginForm.markAllAsTouched();
 
     // Check if account is locked
     if (this.isAccountLocked()) {
@@ -276,46 +324,32 @@ export class LoginComponent implements OnInit, AfterViewInit {
         life: TOAST_LIFETIMES.ERROR,
       });
       return;
-    }
-
-    // Mark all fields as touched
-    this.markFieldAsTouched('username');
-    this.markFieldAsTouched('password');
-
-    // Validate credentials
-    const usernameValidation = this.validateUsername(
-      this.credentials().username
-    );
-    const passwordValidation = this.validatePassword(
-      this.credentials().password
-    );
-
-    // Update validation state
-    this.validation.set({
-      username: {
-        touched: true,
-        valid: usernameValidation.valid,
-        message: usernameValidation.message,
-      },
-      password: {
-        touched: true,
-        valid: passwordValidation.valid,
-        message: passwordValidation.message,
-      },
-    });
-
-    // Show validation errors if any
-    if (!usernameValidation.valid || !passwordValidation.valid) {
+    } 
+    
+    // Check form validity
+    if (!this.loginForm.valid) {
+      // Collect all validation errors
       const errors = [];
-      if (!usernameValidation.valid) errors.push(usernameValidation.message);
-      if (!passwordValidation.valid) errors.push(passwordValidation.message);
-      this._messageService.add({
-        severity: 'error',
-        summary: 'Validation Error',
-        detail: `Please fix the following issues:\n• ${errors.join('\n• ')}`,
-        life: TOAST_LIFETIMES.ERROR,
-      });
-      return;
+
+      const usernameControl = this.loginForm.get('username');
+      if (usernameControl?.errors && usernameControl.touched) {
+        errors.push(usernameControl.errors['message'] || 'Username is invalid');
+      }
+
+      const passwordControl = this.loginForm.get('password');
+      if (passwordControl?.errors && passwordControl.touched) {
+        errors.push(passwordControl.errors['message'] || 'Password is invalid');
+      }
+
+      if (errors.length > 0) {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'Validation Error',
+          detail: `Please fix the following issues:\n• ${errors.join('\n• ')}`,
+          life: TOAST_LIFETIMES.ERROR,
+        });
+        return;
+      }
     }
 
     // Proceed with login
@@ -325,20 +359,22 @@ export class LoginComponent implements OnInit, AfterViewInit {
   private performLogin(): void {
     this.isLoading.set(true);
 
+    // Get form values
+    const formValue = this.loginForm.value;
+    const username = formValue.username;
+    const password = formValue.password;
+
     // Simulate API call
     setTimeout(() => {
       this.isLoading.set(false);
 
       // Simple credential check (replace with actual authentication)
-      if (
-        this.credentials().username === 'admin' &&
-        this.credentials().password === 'password'
-      ) {
+      if (username === 'admin' && password === 'password') {
         this.resetFailedAttempts();
         this._messageService.add({
           severity: 'success',
           summary: 'Login Successful',
-          detail: `Welcome back, ${this.credentials().username}!`,
+          detail: `Welcome back, ${username}!`,
           life: TOAST_LIFETIMES.SUCCESS,
         });
         // Navigate to home/dashboard
@@ -353,7 +389,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
         });
       }
     }, UI_CONSTANTS.LOADING_SIMULATION);
-  } // User action handlers
+  }
+
+  // User action handlers
   onForgotPassword(): void {
     this._messageService.add({
       severity: 'info',
@@ -371,7 +409,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
       life: TOAST_LIFETIMES.INFO,
     });
   }
+  
   togglePasswordVisibility(): void {
-    this.formState.showPassword.set(!this.formState.showPassword());
+    this.showPassword.set(!this.showPassword());
   }
 }
